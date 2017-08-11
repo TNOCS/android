@@ -5,6 +5,7 @@ import org.owntracks.android.injection.modules.ViewModelModule;
 import org.owntracks.android.injection.scopes.PerActivity;
 import org.owntracks.android.ui.configuration.ConfigurationActivity;
 import org.owntracks.android.ui.contacts.ContactsActivity;
+import org.owntracks.android.ui.diary.DiaryActivity;
 import org.owntracks.android.ui.load.LoadActivity;
 import org.owntracks.android.ui.map.MapActivity;
 import org.owntracks.android.ui.status.StatusActivity;
@@ -27,6 +28,7 @@ import dagger.Component;
 @PerActivity
 @Component(dependencies = AppComponent.class, modules = {ActivityModule.class, ViewModelModule.class})
 public interface ActivityComponent {
+    void inject(DiaryActivity activity);
     void inject(MapActivity activity);
     void inject(ContactsActivity activity);
     void inject(StatusActivity activity);

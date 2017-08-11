@@ -28,6 +28,7 @@ import org.owntracks.android.activities.ActivityRegions;
 import org.owntracks.android.support.Preferences;
 import org.owntracks.android.ui.base.BaseActivity;
 import org.owntracks.android.ui.contacts.ContactsActivity;
+import org.owntracks.android.ui.diary.DiaryActivity;
 import org.owntracks.android.ui.map.MapActivity;
 import org.owntracks.android.ui.status.StatusActivity;
 
@@ -140,6 +141,7 @@ public class ActivityNavigator extends BaseNavigator {
                 .withStickyFooterShadow(false)
                 .withStickyFooterDivider(true)
                 .addDrawerItems(
+                        drawerItemForClass(activity, DiaryActivity.class, R.string.title_activity_diary, R.drawable.ic_date_range_black_24dp),
                         drawerItemForClass(activity, MapActivity.class, R.string.title_activity_map, R.drawable.ic_layers_black_24dp),
                         drawerItemForClass(activity, ContactsActivity.class, R.string.title_activity_contacts, R.drawable.ic_supervisor_account_black_24dp),
                         drawerItemForClass(activity, ActivityRegions.class, R.string.title_activity_regions, R.drawable.ic_adjust_black_24dp)

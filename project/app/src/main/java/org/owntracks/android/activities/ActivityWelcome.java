@@ -34,6 +34,7 @@ import org.owntracks.android.R;
 import org.owntracks.android.support.unfree.GoogleApiAvailabilityResponder;
 import org.owntracks.android.support.widgets.PausableViewPager;
 import org.owntracks.android.support.Preferences;
+import org.owntracks.android.ui.diary.DiaryActivity;
 import org.owntracks.android.ui.map.MapActivity;
 
 import java.util.ArrayList;
@@ -93,7 +94,7 @@ public class ActivityWelcome extends ActivityBase implements ViewPager.OnPageCha
 
     private void startActivityMain() {
         App.enableForegroundBackgroundDetection();
-        Intent intent = new Intent(this, MapActivity.class);
+        Intent intent = new Intent(this, DiaryActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(intent);
         finish();

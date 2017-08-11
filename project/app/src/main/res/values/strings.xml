@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">Owntracks</string>
+    <string name="app_name">PoliceTracks</string>
     <string name="preferencesServer">"Connection"</string>
     <string name="preferencesHost" translatable="false">"Host"</string>
     <string name="preferencesPort" translatable="false">"Port"</string>
@@ -36,7 +36,7 @@
     <string name="preferencesLocatorIntervalSummary">Seconds between location updates</string>
     <string name="preferencesInfo">Information</string>
     <string name="preferencesRepository">Source Code</string>
-    <string name="preferencesRepositorySummary" translatable="false">github.com/owntracks/android</string>
+    <string name="preferencesRepositorySummary" translatable="false">github.com/TNOCS/android</string>
     <string name="preferencesDocumentation">Documentation</string>
     <string name="preferencesDocumentationSummary" translatable="false">owntracks.org/booklet/</string>
     <string name="preferencesTwitter" translatable="false">Twitter</string>
@@ -129,6 +129,7 @@
     <string name="locationPermissionNotAvailable">Location access denied</string>
     <string name="title_activity_regions">Regions</string>
     <string name="title_activity_region">Region</string>
+    <string name="title_activity_diary">Diary</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_contacts">Friends</string>
     <string name="title_activity_status">Status</string>
@@ -190,23 +191,23 @@
     <string name="ERROR_CONFIGURATION">Configuration incomplete</string>
     <string name="errorPreferencesImportFailed">Import failed</string>
     <string name="welcome_play_heading">Google Play Services</string>
-    <string name="welcome_play_description">Owntracks requires Google Play Services</string>
+    <string name="welcome_play_description">PoliceTracks requires Google Play Services</string>
     <string name="icon_description_warning">Warning</string>
     <string name="play_services_not_available_general">Google Play Services are not available</string>
     <string name="play_override_continue">Yes, continue at own risk</string>
     <string name="play_override_question">It seems, Google Play Services cannot be used on your device. If you continue, this app is operating in unsupported mode. Certain features may not be available.</string>
     <string name="welcome_heading">Welcome</string>
-    <string name="welcome_description">The following steps will help you to get started with Owntracks</string>
+    <string name="welcome_description">The following steps will help you to get started with PoliceTracks</string>
     <string name="mode_heading">Mode</string>
-    <string name="mode_description">Owntracks can run in one of several modes. Select the mode that best suits your needs.</string>
-    <string name="mqtt_public_description">Try out Owntracks and share your location anonymously with other users</string>
-    <string name="mqtt_private_description">Connect to your own private Owntracks setup and share your location with family or friends</string>
+    <string name="mode_description">PoliceTracks can run in one of several modes. Select the mode that best suits your needs.</string>
+    <string name="mqtt_public_description">Try out PoliceTracks and share your location anonymously with other users</string>
+    <string name="mqtt_private_description">Connect to your own private PoliceTracks setup and share your location with reserachers</string>
     <string name="permissions_heading">Permissions</string>
-    <string name="permissions_description">Owntracks requires access to your location. Please grant this permission before continuing.</string>
+    <string name="permissions_description">PoliceTracks requires access to your location. Please grant this permission before continuing.</string>
     <string name="permissions_granted">Permissions have been granted</string>
     <string name="icon_description_cloud">Cloud</string>
-    <string name="icon_description_owntracks">Owntracks</string>
-    <string name="enjoy_description">Enjoy Owntracks</string>
+    <string name="icon_description_owntracks">PoliceTracks</string>
+    <string name="enjoy_description">Enjoy PoliceTracks</string>
     <string name="done_heading">Done</string>
     <string name="icon_description_done">Done</string>
     <string name="title_activity_load">Configuration import</string>

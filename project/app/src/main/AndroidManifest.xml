@@ -53,7 +53,7 @@
 
         <meta-data
             android:name="android.support.PARENT_ACTIVITY"
-            android:value=".ui.map.MapActivity" />
+            android:value=".ui.diary.DiaryActivity" />
 
         <activity
             android:name=".activities.ActivityRegions"
@@ -72,7 +72,7 @@
             android:name=".activities.ActivityPreferences"
             android:label="@string/title_activity_preferences"
             android:hardwareAccelerated="true"
-            android:parentActivityName=".ui.map.MapActivity" />
+            android:parentActivityName=".ui.diary.DiaryActivity" />
 
         <activity
             android:name=".activities.ActivityPreferencesConnection"
@@ -199,10 +199,16 @@
             android:label="@string/title_activity_status"
             android:exported="true"
             android:launchMode="singleTop"
-            android:parentActivityName=".ui.map.MapActivity">
+            android:parentActivityName=".ui.diary.DiaryActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".ui.map.MapActivity" />
+                android:value=".ui.diary.DiaryActivity" />
+        </activity>
+        <activity
+            android:name=".ui.diary.DiaryActivity"
+            android:clearTaskOnLaunch="true"
+            android:label="@string/title_activity_diary"
+            android:launchMode="singleTask" >
         </activity>
         <activity
             android:name=".ui.contacts.ContactsActivity"
