@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto" >
+    <data>
+        <import type="android.view.View"/>
+        <variable name="day" type="org.owntracks.android.db.Day" />
+
+    </data>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="?selectableItemBackground"
+        android:id="@+id/dayRow"
+        android:minHeight="72dp">
+
+
+        <LinearLayout
+            android:id="@+id/textview_container"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignWithParentIfMissing="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="16dp"
+            android:orientation="vertical"
+            android:paddingBottom="16dp"
+            android:paddingTop="16dp">
+
+            <TextView
+
+                android:id="@+id/name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@{day.description}"
+                android:ellipsize="end"
+                android:singleLine="true"
+                style="@style/ListItemPrimary" />
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

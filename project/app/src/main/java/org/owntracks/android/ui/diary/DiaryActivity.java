@@ -9,6 +9,9 @@ import android.view.View;
 import org.owntracks.android.R;
 import org.owntracks.android.activities.ActivityWelcome;
 import org.owntracks.android.databinding.UiActivityDiaryBinding;
+import org.owntracks.android.db.Dao;
+import org.owntracks.android.db.Day;
+import org.owntracks.android.db.DayDao;
 import org.owntracks.android.model.FusedContact;
 import org.owntracks.android.model.Intervention;
 import org.owntracks.android.ui.base.BaseActivity;
@@ -32,13 +35,11 @@ public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvv
         setDrawer(binding.toolbar);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(new DiaryAdapter(viewModel.getInterventions(), this));
+        binding.recyclerView.setAdapter(new DiaryAdapter(viewModel.getDays(), this));
     }
 
-
-
     @Override
-    public void onClick(@NonNull Intervention object, @NonNull View view, boolean longClick) {
-        viewModel.onInterventionClick(object);
+    public void onClick(@NonNull Day object, @NonNull View view, boolean longClick) {
+        viewModel.onDayClick(object);
     }
 }

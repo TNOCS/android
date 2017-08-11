@@ -2,6 +2,8 @@ package org.owntracks.android.ui.diary;
 
 import android.databinding.ObservableList;
 
+import org.owntracks.android.db.Day;
+import org.owntracks.android.db.DayDao;
 import org.owntracks.android.model.Intervention;
 import org.owntracks.android.ui.base.view.MvvmView;
 import org.owntracks.android.ui.base.viewmodel.MvvmViewModel;
@@ -25,7 +27,7 @@ public interface DiaryMvvm {
     }
 
     interface ViewModel<V extends MvvmView> extends MvvmViewModel<V> {
-        ObservableList<Intervention> getInterventions();
-        void onInterventionClick(Intervention iv);
+        ObservableList<Day> getDays();
+        void onDayClick(Day day);
     }
 }

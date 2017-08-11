@@ -7,6 +7,7 @@ public  class Dao {
     private static final String NAME = "org.owntracks.android.db";
     private static final String TAG = "Dao";
     private static org.owntracks.android.db.WaypointDao waypointDao;
+    private static org.owntracks.android.db.DayDao dayDao;
     private static SQLiteDatabase db;
 
     public static void initialize(Context c) {
@@ -15,10 +16,12 @@ public  class Dao {
         org.owntracks.android.db.DaoMaster daoMaster1 = new org.owntracks.android.db.DaoMaster(db);
         org.owntracks.android.db.DaoSession daoSession1 = daoMaster1.newSession();
         waypointDao = daoSession1.getWaypointDao();
-
+        org.owntracks.android.db.DaoSession daoSession2 = daoMaster1.newSession();
+        dayDao = daoSession2.getDayDao();
     }
 
 
     public static SQLiteDatabase getDb() { return db; }
     public static org.owntracks.android.db.WaypointDao getWaypointDao() {  return waypointDao; }
+    public static org.owntracks.android.db.DayDao getDayDao() {  return dayDao; }
 }
