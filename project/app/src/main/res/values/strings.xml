@@ -79,6 +79,7 @@
     <string name="contactLocationUnknown">No location is available</string>
     <string name="menuContactNavigate">Navigate</string>
     <string name="menuCurrentLoction">Current location</string>
+    <string name="addToday">Add today</string>
 
     <string name="contactDetailsLocation">Location</string>
     <string name="contactDetailsAccuracy">Accuracy</string>
@@ -156,6 +157,7 @@
     <string name="geofenceAndBeaconActive">Geofence and beacon enabled</string>
     <string name="beaconActive">Beacon enabled</string>
     <string name="preferencesExportQueued">Export queued</string>
+    <string name="noDaysLogged">No days have been logged yet</string>
 
 
     <string name="welcomeFixIssue">GRANT PERMISSION</string>

@@ -2,6 +2,7 @@ package org.owntracks.android.support;
 
 import java.util.Date;
 
+import org.owntracks.android.db.Day;
 import org.owntracks.android.db.Waypoint;
 import org.owntracks.android.model.FusedContact;
 import org.owntracks.android.model.GeocodableLocation;
@@ -117,6 +118,20 @@ public class Events {
 
 		public Waypoint getWaypoint() {
 			return this.w;
+		}
+
+	}
+
+	public static class DayAdded extends E {
+		final Day day;
+
+		public DayAdded(Day day) {
+			super();
+			this.day = day;
+		}
+
+		public Day getDay() {
+			return this.day;
 		}
 
 	}
