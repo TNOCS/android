@@ -52,14 +52,19 @@
         android:layout_marginBottom="48dp"/>
 
     <Button
+        android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/welcomeFixIssue"
-        android:id="@+id/button"
         android:layout_above="@+id/view"
-        android:visibility="visible"
         android:layout_centerHorizontal="true"
-        android:layout_marginBottom="48dp"/>
+        android:layout_marginBottom="80dp"
+        android:paddingBottom="48dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        android:paddingTop="48dp"
+        android:text="@string/welcomeFixIssue"
+        android:textSize="18sp"
+        android:visibility="visible" />
 
     <TextView
         android:id="@+id/screen_desc"

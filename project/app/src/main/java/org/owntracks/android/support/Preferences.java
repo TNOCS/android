@@ -52,8 +52,8 @@ public class Preferences {
     private static SharedPreferences httpSharedPreferences;
     private static SharedPreferences publicSharedPreferences;
 
-    private static int modeId = App.MODE_ID_MQTT_PRIVATE;
-    private static String deviceUUID = "";
+    private static int modeId = App.MODE_ID_HTTP_PRIVATE;
+    private static String deviceUUID = "unknown-uuid";
 
     public static boolean isModeMqttPrivate(){ return modeId == App.MODE_ID_MQTT_PRIVATE; }
 
@@ -467,7 +467,7 @@ public class Preferences {
     @Export(key =Keys.USERNAME, exportModeMqttPrivate =true)
     public static String getUsername() {
         // in public, the username is just used to build the topic public/user/$deviceId
-        return getString(Keys.USERNAME, R.string.valEmpty, R.string.valUsernamePublic, R.string.valEmpty, true, false);
+        return getDeviceId();
     }
 
     @Export(key =Keys.AUTH, exportModeMqttPrivate =true)
@@ -701,8 +701,8 @@ public class Preferences {
 
     @Import(key =Keys.USERNAME)
     public static void setUsername(String value) {
-
-            setString(Keys.USERNAME, value);
+        value = getDeviceId();
+        setString(Keys.USERNAME, value);
     }
 
     @Import(key =Keys.PUB_EXTENDED_DATA)

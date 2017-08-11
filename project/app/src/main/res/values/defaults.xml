@@ -9,7 +9,7 @@
     <string name="valSubTopic" translatable="false">owntracks/+/+</string>
     <integer name="valMqttProtocolLevelPublic" translatable="false">3</integer>
 
-    <string name="valHttpServerEndpoint" translatable="false">http://134.221.20.240/pub</string>
+    <string name="valHttpServerEndpoint" translatable="false">http://134.221.20.240:3789/pub</string>
     <integer name="valPort">8883</integer>
     <integer name="valPubQos">1</integer>
     <integer name="valSubQos">2</integer>
@@ -27,7 +27,7 @@
     <integer name="valSubQosPublic">2</integer>
     <integer name="valIgnoreStaleLocations">0</integer>
     <integer name="valIgnoreInaccurateLocations">0</integer>
-    <integer name="valModeId">0</integer>
+    <integer name="valModeId">3</integer>
     <integer name="valMqttProtocolLevel">3</integer>
 
     <bool name="valPub">true</bool>
@@ -44,7 +44,7 @@
     <bool name="valPubRetain">true</bool>
     <bool name="valAutostartOnBoot">true</bool>
     <bool name="valPlayOverride">false</bool>
-    <bool name="valAuth">true</bool>
+    <bool name="valAuth">false</bool>
     <bool name="valRemoteCommand">true</bool>
     <bool name="valRemoteConfiguration">true</bool>
     <bool name="valBeaconRangingEnabled">false</bool>

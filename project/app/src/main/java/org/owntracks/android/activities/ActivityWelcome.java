@@ -302,7 +302,7 @@ public class ActivityWelcome extends ActivityBase implements ViewPager.OnPageCha
         if(checkSetup) {
             Preferences.setSetupCompleted();
             if(!Preferences.isModeMqttPublic())
-                startActivityPreferences();
+                startActivityMain();
             else
                 startActivityMain();
         } else {
@@ -478,7 +478,7 @@ public class ActivityWelcome extends ActivityBase implements ViewPager.OnPageCha
                     }
                 }
             });
-            rg.check(R.id.radioModeMqttPublic);
+            rg.check(R.id.radioModeHttpPrivate);
 
             return v;
         }

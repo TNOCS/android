@@ -158,7 +158,7 @@
     <string name="preferencesExportQueued">Export queued</string>
 
 
-    <string name="welcomeFixIssue">Fix</string>
+    <string name="welcomeFixIssue">GRANT PERMISSION</string>
     <string name="welcomeFixQuit">Quit</string>
     <string name="play_services_now_available">Google Play Services are now available</string>
 
@@ -201,7 +201,7 @@
     <string name="mode_heading">Mode</string>
     <string name="mode_description">PoliceTracks can run in one of several modes. Select the mode that best suits your needs.</string>
     <string name="mqtt_public_description">Try out PoliceTracks and share your location anonymously with other users</string>
-    <string name="mqtt_private_description">Connect to your own private PoliceTracks setup and share your location with reserachers</string>
+    <string name="mqtt_private_description">Connect to a private PoliceTracks setup and share your location with researchers</string>
     <string name="permissions_heading">Permissions</string>
     <string name="permissions_description">PoliceTracks requires access to your location. Please grant this permission before continuing.</string>
     <string name="permissions_granted">Permissions have been granted</string>
