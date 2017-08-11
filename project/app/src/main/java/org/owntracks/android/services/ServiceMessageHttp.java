@@ -124,6 +124,7 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
         } catch (MalformedURLException e) {
             e.printStackTrace();
             service.onEndpointStateChanged(EndpointState.ERROR_CONFIGURATION);
+            Timber.v("Error setting endpoint url: %s", this.endpointUrl );
             return;
         }
 

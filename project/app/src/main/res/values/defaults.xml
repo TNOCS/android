@@ -9,6 +9,7 @@
     <string name="valSubTopic" translatable="false">owntracks/+/+</string>
     <integer name="valMqttProtocolLevelPublic" translatable="false">3</integer>
 
+    <string name="valHttpServerEndpoint" translatable="false">http://134.221.20.240/pub</string>
     <integer name="valPort">8883</integer>
     <integer name="valPubQos">1</integer>
     <integer name="valSubQos">2</integer>

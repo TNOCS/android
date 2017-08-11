@@ -28,6 +28,7 @@ import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.annotation.StringRes;
+import android.provider.Settings.Secure;
 
 import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Waypoint;
@@ -72,7 +73,9 @@ public class Preferences {
         httpSharedPreferences = c.getSharedPreferences(FILENAME_HTTP, Context.MODE_PRIVATE);
         publicSharedPreferences = c.getSharedPreferences(FILENAME_PUBLIC, Context.MODE_PRIVATE);
 
-        deviceUUID = sharedPreferences.getString(Keys._DEVICE_UUID, "undefined-uuid");
+        // Use the android device UID to identify the device: https://stackoverflow.com/a/2785493/2788197
+        deviceUUID = Secure.getString(App.getContext().getContentResolver(), Secure.ANDROID_ID);
+
         initMode(sharedPreferences.getInt(Keys.MODE_ID, getIntResource(R.integer.valModeId)));
     }
 
@@ -82,7 +85,7 @@ public class Preferences {
         if(active == App.MODE_ID_MQTT_PRIVATE || active == App.MODE_ID_MQTT_PUBLIC || active == App.MODE_ID_HTTP_PRIVATE) {
             setMode(active, true);
         } else {
-            setMode(App.MODE_ID_MQTT_PRIVATE, true);
+            setMode(App.MODE_ID_HTTP_PRIVATE, true);
         }
     }
 
@@ -479,13 +482,11 @@ public class Preferences {
     }
 
     public static String getDeviceId(boolean fallbackToDefault) {
-        if(Preferences.isModeMqttPublic())
-            return getDeviceUUID();
+        return getDeviceUUID();
 
-        String deviceId = getString(Keys.DEVICE_ID, R.string.valEmpty);
-        if ("".equals(deviceId) && fallbackToDefault)
-            return getDeviceIdDefault();
-        return deviceId;
+//        if ("".equals(deviceId) && fallbackToDefault)
+//            return getDeviceIdDefault();
+//        return deviceId;
     }
 
     @Export(key =Keys.IGNORE_STALE_LOCATIONS, exportModeMqttPrivate =true, exportModeHttpPrivate =true)
@@ -603,9 +604,9 @@ public class Preferences {
 
     }
     public static String getTrackerId(boolean fallback) {
-
-        String tid = getString(Keys.TRACKER_ID, R.string.valEmpty);
-
+        String tid = getDeviceId();
+        if(tid==null || tid.isEmpty())
+            tid = getString(Keys.TRACKER_ID, R.string.valEmpty);
         if(tid==null || tid.isEmpty())
             return fallback ? getTrackerIdDefault() : "";
         else
@@ -992,7 +993,7 @@ public class Preferences {
 
     @Export(key = Keys.URL, exportModeHttpPrivate = true)
     public static String getUrl() {
-        return getString(Keys.URL, R.string.valEmpty);
+        return getString(Keys.URL, R.string.valHttpServerEndpoint);
     }
     public static void setTlsClientCrtPassword(String password) {
         setString(Keys.TLS_CLIENT_CRT_PASSWORD, password);
