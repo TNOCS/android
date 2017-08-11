@@ -18,17 +18,12 @@ import org.owntracks.android.db.Day;
 import org.owntracks.android.db.DayDao;
 import org.owntracks.android.injection.qualifier.AppContext;
 import org.owntracks.android.injection.scopes.PerActivity;
-import org.owntracks.android.messages.MessageDay;
-import org.owntracks.android.model.Intervention;
 import org.owntracks.android.support.Events;
 import org.owntracks.android.ui.base.viewmodel.BaseViewModel;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 

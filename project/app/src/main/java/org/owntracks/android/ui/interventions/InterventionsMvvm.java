@@ -1,8 +1,8 @@
-package org.owntracks.android.ui.diary;
+package org.owntracks.android.ui.interventions;
 
 import android.databinding.ObservableList;
 
-import org.owntracks.android.db.Day;
+import org.owntracks.android.db.Intervention;
 import org.owntracks.android.ui.base.view.MvvmView;
 import org.owntracks.android.ui.base.viewmodel.MvvmViewModel;
 
@@ -19,15 +19,14 @@ import org.owntracks.android.ui.base.viewmodel.MvvmViewModel;
  * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
  * See the License for the specific language governing permissions and
  * limitations under the License. */
-public interface DiaryMvvm {
+public interface InterventionsMvvm {
 
     interface View extends MvvmView {
     }
 
     interface ViewModel<V extends MvvmView> extends MvvmViewModel<V> {
-        ObservableList<Day> getDays();
-        boolean isTodayAlreadyAdded();
-        void addToday();
-        void onDayClick(Day day);
+        ObservableList<Intervention> getInterventions();
+        void addIntervention();
+        void onInterventionClick(Intervention iv);
     }
 }

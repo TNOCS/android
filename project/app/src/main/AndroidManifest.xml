@@ -217,10 +217,15 @@
             android:launchMode="singleTask" >
         </activity>
         <activity
+            android:name=".ui.interventions.InterventionsActivity"
+            android:label="@string/title_activity_interventions"
+            android:launchMode="singleTop" >
+        </activity>
+        <activity
             android:name=".ui.map.MapActivity"
-            android:clearTaskOnLaunch="true"
+            android:clearTaskOnLaunch="false"
             android:label=""
-            android:launchMode="singleTask" >
+            android:launchMode="singleTop" >
         </activity>
         <activity android:name=".activities.ActivityWelcome"
             android:configChanges="orientation|keyboardHidden"

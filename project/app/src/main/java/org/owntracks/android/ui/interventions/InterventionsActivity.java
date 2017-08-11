@@ -1,6 +1,5 @@
-package org.owntracks.android.ui.diary;
+package org.owntracks.android.ui.interventions;
 
-import android.app.PendingIntent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -12,14 +11,14 @@ import android.view.View;
 
 import org.owntracks.android.R;
 import org.owntracks.android.activities.ActivityWelcome;
-import org.owntracks.android.databinding.UiActivityDiaryBinding;
-import org.owntracks.android.db.Day;
+import org.owntracks.android.databinding.UiActivityInterventionsBinding;
+import org.owntracks.android.db.Intervention;
 import org.owntracks.android.ui.base.BaseActivity;
 
 import timber.log.Timber;
 
 
-public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvvm.ViewModel> implements DiaryMvvm.View, org.owntracks.android.ui.diary.DiaryAdapter.ClickListener {
+public class InterventionsActivity extends BaseActivity<UiActivityInterventionsBinding, InterventionsMvvm.ViewModel> implements InterventionsMvvm.View, org.owntracks.android.ui.interventions.InterventionsAdapter.ClickListener {
     private Menu mMenu;
 
     @Override
@@ -29,49 +28,39 @@ public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvv
         ActivityWelcome.runChecks(this);
 
         activityComponent().inject(this);
-        setAndBindContentView(R.layout.ui_activity_diary, savedInstanceState);
+        setAndBindContentView(R.layout.ui_activity_interventions, savedInstanceState);
 
         setHasEventBus(false);
         setSupportToolbar(binding.toolbar);
         setDrawer(binding.toolbar);
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(new DiaryAdapter(viewModel.getDays(), this));
+        binding.recyclerView.setAdapter(new InterventionsAdapter(viewModel.getInterventions(), this));
     }
 
     @Override
-    public void onClick(@NonNull Day object, @NonNull View view, boolean longClick) {
-        viewModel.onDayClick(object);
+    public void onClick(@NonNull Intervention object, @NonNull View view, boolean longClick) {
+        viewModel.onInterventionClick(object);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_addtoday, menu);
+        inflater.inflate(R.menu.activity_intervention, menu);
         this.mMenu = menu;
-        if(!viewModel.isTodayAlreadyAdded())
-            disableAddTodayMenu();
         return true;
-    }
-
-    private void disableAddTodayMenu() {
-        this.mMenu.findItem(R.id.menu_addtoday).getIcon().setAlpha(130);
-    }
-
-    private void enableAddTodayMenu() {
-        this.mMenu.findItem(R.id.menu_addtoday).getIcon().setAlpha(255);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_addtoday) {
-            this.addToday();
+        if (itemId == R.id.menu_addintervention) {
+            this.addIntervention();
             return true;
         }
         return false;
     }
 
-    private void addToday() {
-        viewModel.addToday();
+    private void addIntervention() {
+        viewModel.addIntervention();
     }
 }

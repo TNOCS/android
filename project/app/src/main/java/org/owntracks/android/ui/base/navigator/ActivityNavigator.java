@@ -29,6 +29,7 @@ import org.owntracks.android.support.Preferences;
 import org.owntracks.android.ui.base.BaseActivity;
 import org.owntracks.android.ui.contacts.ContactsActivity;
 import org.owntracks.android.ui.diary.DiaryActivity;
+import org.owntracks.android.ui.interventions.InterventionsActivity;
 import org.owntracks.android.ui.map.MapActivity;
 import org.owntracks.android.ui.status.StatusActivity;
 

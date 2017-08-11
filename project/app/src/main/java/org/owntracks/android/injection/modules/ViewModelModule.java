@@ -6,6 +6,8 @@ import org.owntracks.android.ui.contacts.ContactsMvvm;
 import org.owntracks.android.ui.contacts.ContactsViewModel;
 import org.owntracks.android.ui.diary.DiaryMvvm;
 import org.owntracks.android.ui.diary.DiaryViewModel;
+import org.owntracks.android.ui.interventions.InterventionsMvvm;
+import org.owntracks.android.ui.interventions.InterventionsViewModel;
 import org.owntracks.android.ui.load.LoadMvvm;
 import org.owntracks.android.ui.load.LoadViewModel;
 import org.owntracks.android.ui.map.MapMvvm;
@@ -28,6 +30,9 @@ public abstract class ViewModelModule {
 
     @Binds
     abstract DiaryMvvm.ViewModel bindDiaryViewModel(DiaryViewModel diaryViewModel);
+
+    @Binds
+    abstract InterventionsMvvm.ViewModel bindInterventionsViewModel(InterventionsViewModel interventionsViewModel);
 
     @Binds
     abstract StatusMvvm.ViewModel bindStatusViewModel(StatusViewModel statusViewModel);

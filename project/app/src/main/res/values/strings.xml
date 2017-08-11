@@ -158,7 +158,8 @@
     <string name="beaconActive">Beacon enabled</string>
     <string name="preferencesExportQueued">Export queued</string>
     <string name="noDaysLogged">No days have been logged yet</string>
-
+    <string name="noInterventionsLogged">No interventions have been logged today</string>
+    <string name="addIntervention">Add intervention</string>
 
     <string name="welcomeFixIssue">GRANT PERMISSION</string>
     <string name="welcomeFixQuit">Quit</string>
@@ -213,6 +214,8 @@
     <string name="done_heading">Done</string>
     <string name="icon_description_done">Done</string>
     <string name="title_activity_load">Configuration import</string>
+    <string name="title_activity_interventions">Interventions</string>
+
     <string name="geocorderResolving">resolving</string>
     <string name="errorPreferencesImportFailedParseException">unable to parse file</string>
     <string name="preferencesIgnoreInaccurateLocations">Inaccurate locations</string>

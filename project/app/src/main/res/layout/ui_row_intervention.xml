@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto" >
+<layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" >
     <data>
         <import type="android.view.View"/>
-        <variable name="intervention" type="org.owntracks.android.model.Intervention" />
-
+        <variable name="intervention" type="org.owntracks.android.db.Intervention" />
     </data>
 
 
@@ -18,7 +16,7 @@
 
 
         <LinearLayout
-            android:id="@+id/textview_container"
+            android:id="@+id/textview_container_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
@@ -30,10 +28,10 @@
 
             <TextView
 
-                android:id="@+id/name"
+                android:id="@+id/ivname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{intervention.title}"
+                android:text="@{intervention.description}"
                 android:ellipsize="end"
                 android:singleLine="true"
                 style="@style/ListItemPrimary" />

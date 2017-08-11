@@ -7,8 +7,6 @@ import android.view.View;
 import org.owntracks.android.BR;
 import org.owntracks.android.R;
 import org.owntracks.android.db.Day;
-import org.owntracks.android.db.DayDao;
-import org.owntracks.android.model.Intervention;
 import org.owntracks.android.ui.base.BaseAdapter;
 import org.owntracks.android.ui.base.BaseAdapterItemView;
 
