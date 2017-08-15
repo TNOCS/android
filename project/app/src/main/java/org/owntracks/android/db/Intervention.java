@@ -6,6 +6,9 @@ import org.greenrobot.greendao.annotation.*;
 
 // KEEP INCLUDES - put your custom includes here
 import android.location.Location;
+
+import java.util.Calendar;
+import java.util.Date;
 // KEEP INCLUDES END
 /**
  * Entity mapped to table "INTERVENTION".
@@ -18,14 +21,16 @@ public class Intervention {
 
     @NotNull
     private String description;
-    private java.util.Date date;
+    private Long from;
+    private Long to;
     private String ivtype;
 
-    @Generated(hash = 537038238)
-    public Intervention(Long id, @NotNull String description, java.util.Date date, String ivtype) {
+    @Generated(hash = 29317382)
+    public Intervention(Long id, @NotNull String description, Long from, Long to, String ivtype) {
         this.id = id;
         this.description = description;
-        this.date = date;
+        this.from = from;
+        this.to = to;
         this.ivtype = ivtype;
     }
 
@@ -63,14 +68,21 @@ public class Intervention {
         this.description = description;
     }
 
-    public java.util.Date getDate() {
-        return date;
+    public Long getFrom() {
+        return from;
     }
 
-    public void setDate(java.util.Date date) {
-        this.date = date;
+    public void setFrom(Long from) {
+        this.from = from;
     }
 
+    public Long getTo() {
+        return to;
+    }
+
+    public void setTo(Long to) {
+        this.to = to;
+    }
 
     public void setDefaults() {
     }

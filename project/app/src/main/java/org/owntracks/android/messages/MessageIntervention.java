@@ -27,7 +27,24 @@ public class MessageIntervention extends MessageBase{
     private String desc;
     private long tst;
     private String ivType;
+    private Long from;
+    private Long to;
 
+    public Long getFrom() {
+        return from;
+    }
+
+    public void setFrom(Long from) {
+        this.from = from;
+    }
+
+    public Long getTo() {
+        return to;
+    }
+
+    public void setTo(Long to) {
+        this.to = to;
+    }
 
     public String getIvType() {
         return ivType;
@@ -68,7 +85,8 @@ public class MessageIntervention extends MessageBase{
         Intervention iv = new Intervention();
 
         iv.setDescription(getDesc());
-        iv.setDate(new Date(TimeUnit.SECONDS.toMillis(getTst())));
+        iv.setFrom(getFrom());
+        iv.setTo(getTo());
         iv.setIvtype(getIvType());
 
         return iv;
@@ -78,7 +96,9 @@ public class MessageIntervention extends MessageBase{
         MessageIntervention message = new MessageIntervention();
         message.setDesc(iv.getDescription());
         message.setIvType(iv.getIvtype());
-        message.setTst(TimeUnit.MILLISECONDS.toSeconds(iv.getDate().getTime()));
+        message.setFrom(iv.getFrom());
+        message.setTo(iv.getTo());
+        message.setTst(TimeUnit.MILLISECONDS.toSeconds(new Date().getTime()));
         return message;
     }
 

@@ -222,6 +222,14 @@
             android:launchMode="singleTop" >
         </activity>
         <activity
+            android:name=".activities.ActivityIntervention"
+            android:label="@string/title_activity_interventions"
+            android:parentActivityName=".ui.interventions.InterventionsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".ui.interventions.InterventionsActivity" />
+        </activity>
+        <activity
             android:name=".ui.map.MapActivity"
             android:clearTaskOnLaunch="false"
             android:label=""

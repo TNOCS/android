@@ -215,6 +215,7 @@
     <string name="icon_description_done">Done</string>
     <string name="title_activity_load">Configuration import</string>
     <string name="title_activity_interventions">Interventions</string>
+    <string name="todayAlreadyAdded">Today was already added</string>
 
     <string name="geocorderResolving">resolving</string>
     <string name="errorPreferencesImportFailedParseException">unable to parse file</string>
@@ -233,5 +234,9 @@
     <string name="preferencesEditorValue">Value</string>
     <string name="drawerSwitchReporting">Reporting</string>
     <string name="drawerSwitchCopy">Copy</string>
+    <string name="startTime">Start time</string>
+    <string name="endTime">End time</string>
+    <string name="set">Set</string>
+    <string name="saveIntervention">Save intervention</string>
 
 </resources>

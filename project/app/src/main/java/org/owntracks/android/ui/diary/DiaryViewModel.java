@@ -12,14 +12,19 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
+import com.android.databinding.library.baseAdapters.BR;
+
 import org.owntracks.android.App;
+import org.owntracks.android.R;
 import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Day;
 import org.owntracks.android.db.DayDao;
 import org.owntracks.android.injection.qualifier.AppContext;
 import org.owntracks.android.injection.scopes.PerActivity;
 import org.owntracks.android.support.Events;
+import org.owntracks.android.support.widgets.Toasts;
 import org.owntracks.android.ui.base.viewmodel.BaseViewModel;
+import org.owntracks.android.ui.interventions.InterventionsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -50,9 +55,14 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
         return dayList;
     }
 
+    public void checkDays() {
+        this.noDaysLogged = (getDays().size() == 0);
+        notifyPropertyChanged(BR.noDaysLogged);
+    }
+
     @Bindable
     public boolean getNoDaysLogged() {
-        this.noDaysLogged = (getDays().size() == 0);
+        this.checkDays();
         return this.noDaysLogged;
     }
 
@@ -74,21 +84,24 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
 
     @Override
     public void addToday() {
-        if (isTodayAlreadyAdded())
+        if (isTodayAlreadyAdded()) {
+            Toasts.showTodayAlreadyAdded();
             return;
+        }
         SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
         Date date = new Date();
         Day day = new Day();
         day.setDate(date);
         day.setDescription(formatter.format(date));
         this.dao.insert(day);
+        this.checkDays();
         App.getEventBus().post(new Events.DayAdded(day));
     }
 
     @Override
     public void onDayClick(Day day) {
-//        Bundle b = new Bundle();
-//        b.putString(MapActivity.BUNDLE_KEY_CONTACT_ID, c.getId());
-//        navigator.get().startActivity(MapActivity.class, b);
+        Bundle b = new Bundle();
+        b.putLong(InterventionsActivity.BUNDLE_KEY_INTERVENTIONS_ID, day.getId());
+        navigator.get().startActivity(InterventionsActivity.class, b);
     }
 }

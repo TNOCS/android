@@ -19,6 +19,8 @@ import timber.log.Timber;
 
 
 public class InterventionsActivity extends BaseActivity<UiActivityInterventionsBinding, InterventionsMvvm.ViewModel> implements InterventionsMvvm.View, org.owntracks.android.ui.interventions.InterventionsAdapter.ClickListener {
+    public static final String BUNDLE_KEY_INTERVENTIONS_ID = "BUNDLE_KEY_INTERVENTIONS_ID";
+
     private Menu mMenu;
 
     @Override
@@ -45,7 +47,7 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_intervention, menu);
+        inflater.inflate(R.menu.activity_interventions, menu);
         this.mMenu = menu;
         return true;
     }
@@ -54,13 +56,9 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_addintervention) {
-            this.addIntervention();
+            viewModel.addIntervention();
             return true;
         }
         return false;
-    }
-
-    private void addIntervention() {
-        viewModel.addIntervention();
     }
 }

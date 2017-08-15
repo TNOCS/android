@@ -27,6 +27,7 @@ public interface DiaryMvvm {
     interface ViewModel<V extends MvvmView> extends MvvmViewModel<V> {
         ObservableList<Day> getDays();
         boolean isTodayAlreadyAdded();
+        void checkDays();
         void addToday();
         void onDayClick(Day day);
     }

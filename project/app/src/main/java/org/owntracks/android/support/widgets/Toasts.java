@@ -50,4 +50,8 @@ public class Toasts {
     public static void showEndpointNotConfigured() {
         Toast.makeText(App.getContext(), App.getContext().getString(R.string.connectivityDisconnectedConfigIncomplete), Toast.LENGTH_SHORT).show();
     }
+
+    public static void showTodayAlreadyAdded() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.todayAlreadyAdded), Toast.LENGTH_SHORT).show();
+    }
 }

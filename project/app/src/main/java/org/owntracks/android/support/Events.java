@@ -136,6 +136,34 @@ public class Events {
 
 	}
 
+	public static class DayRemoved extends E {
+		final Day day;
+
+		public DayRemoved(Day day) {
+			super();
+			this.day = day;
+		}
+
+		public Day getDay() {
+			return this.day;
+		}
+
+	}
+
+	public static class DayUpdated extends E {
+		final Day day;
+
+		public DayUpdated(Day day) {
+			super();
+			this.day = day;
+		}
+
+		public Day getDay() {
+			return this.day;
+		}
+
+	}
+
 	public static abstract class E {
 		final Date date;
 

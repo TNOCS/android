@@ -9,6 +9,7 @@ import org.greenrobot.eventbus.Subscribe;
 import org.greenrobot.eventbus.ThreadMode;
 import org.owntracks.android.App;
 import org.owntracks.android.db.Dao;
+import org.owntracks.android.db.Day;
 import org.owntracks.android.db.Waypoint;
 import org.owntracks.android.db.WaypointDao;
 import org.owntracks.android.messages.MessageLocation;
@@ -478,6 +479,12 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
 
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onEvent(Events.DayAdded e) {
+        handleDay(e.getDay(), false, false);
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
     public void onEvent(Events.WaypointAdded e) {
 		handleWaypoint(e.getWaypoint(), false, false);
 	}
@@ -515,7 +522,10 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
     }
 
 
-
+    private void handleDay(Day d, boolean update, boolean remove) {
+        //TODO;
+        return;
+    }
 
     private void handleWaypoint(Waypoint w, boolean update, boolean remove) {
         Timber.v("handleWaypoint u:" +update + " r:"+remove);

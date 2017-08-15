@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PoliceTracks</string>
+    <string name="CONNECTED">Verbonden</string>
+    <string name="CONNECTING">Verbinden</string>
+    <string name="DISCONNECTED">Verbroken</string>
+    <string name="DISCONNECTED_USERDISCONNECT">Verbroken</string>
+    <string name="DISCONNECTING">Verbreken</string>
+    <string name="IDLE"></string>
+    <string name="addToday">Nieuwe dag toevoegen</string>
+    <string name="addIntervention">Interventie toevoegen</string>
+    <string name="icon_description_owntracks">PoliceTracks</string>
+    <string name="icon_description_warning">Waarschuwing</string>
+    <string name="mode_http_private_label">HTTP Privaat</string>
+    <string name="mode_mqtt_private_label">MQTT Privaat</string>
+    <string name="mode_mqtt_public_label">MQTT Publiek</string>
+    <string name="seconds">Secondes</string>
+    <string name="welcome_heading">Welkom</string>
+    <string name="welcomeFixIssue">Permissie geven</string>
+    <string name="welcome_description">In de volgende stappen kunt u PoliceTracks configureren</string>
+    <string name="permissions_description">PoliceTracks heeft toegang nodig tot GPS-posities. Geef toestemming alvorens door te gaan met de configuratie.</string>
+    <string name="permissions_heading">Permissies</string>
+    <string name="permissions_granted">Permissie gegeven</string>
+    <string name="noInterventionsLogged">Er zijn vandaag nog geen interventies gelogd</string>
+    <string name="noDaysLogged">Er zijn nog geen dagen gelogd</string>
+    <string name="notificationMessageTitle">Berichten</string>
+    <string name="na">Niet beschikbaar</string>
+    <string name="locationPermissionNotAvailable">Locatie-toegang geweigerd</string>
+    <string name="todayAlreadyAdded">De huidige dag is al toegevoegd</string>
+    <string name="startTime">Starttijd</string>
+    <string name="endTime">Eindtijd</string>
+    <string name="set">Stel in</string>
+    <string name="saveIntervention">Bewaar interventie</string>
+</resources>
