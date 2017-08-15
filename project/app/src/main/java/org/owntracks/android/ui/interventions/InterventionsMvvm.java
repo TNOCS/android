@@ -26,7 +26,7 @@ public interface InterventionsMvvm {
 
     interface ViewModel<V extends MvvmView> extends MvvmViewModel<V> {
         ObservableList<Intervention> getInterventions();
-        void addIntervention();
-        void onInterventionClick(Intervention iv);
+        void checkInterventions();
+        void onInterventionClick(Intervention iv, android.view.View view);
     }
 }

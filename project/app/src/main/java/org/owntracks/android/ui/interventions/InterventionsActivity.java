@@ -1,5 +1,6 @@
 package org.owntracks.android.ui.interventions;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -10,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 
 import org.owntracks.android.R;
+import org.owntracks.android.activities.ActivityIntervention;
 import org.owntracks.android.activities.ActivityWelcome;
 import org.owntracks.android.databinding.UiActivityInterventionsBinding;
 import org.owntracks.android.db.Intervention;
@@ -22,6 +24,7 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
     public static final String BUNDLE_KEY_INTERVENTIONS_ID = "BUNDLE_KEY_INTERVENTIONS_ID";
 
     private Menu mMenu;
+    private InterventionsAdapter interventionAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -36,13 +39,20 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
         setSupportToolbar(binding.toolbar);
         setDrawer(binding.toolbar);
 
+        interventionAdapter = new InterventionsAdapter(viewModel.getInterventions(), this);
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(new InterventionsAdapter(viewModel.getInterventions(), this));
+        binding.recyclerView.setAdapter(interventionAdapter);
+    }
+
+    @Override
+    public void onResume() {
+        updateAdapter();
+        super.onResume();
     }
 
     @Override
     public void onClick(@NonNull Intervention object, @NonNull View view, boolean longClick) {
-        viewModel.onInterventionClick(object);
+        viewModel.onInterventionClick(object, view);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -56,9 +66,16 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_addintervention) {
-            viewModel.addIntervention();
+            Intent detailIntent = new Intent(this, ActivityIntervention.class);
+            startActivity(detailIntent);
             return true;
         }
         return false;
+    }
+
+    private void updateAdapter() {
+        viewModel.checkInterventions();
+        interventionAdapter.setItems(viewModel.getInterventions());
+        binding.recyclerView.postInvalidate();
     }
 }

@@ -1,6 +1,7 @@
 package org.owntracks.android.ui.interventions;
 
 import android.content.Context;
+import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
@@ -8,9 +9,13 @@ import android.databinding.ObservableList;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.view.View;
+
+import com.android.databinding.library.baseAdapters.BR;
 
 import org.owntracks.android.App;
 import org.owntracks.android.activities.ActivityIntervention;
+import org.owntracks.android.activities.ActivityRegion;
 import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Intervention;
 import org.owntracks.android.db.InterventionDao;
@@ -29,7 +34,7 @@ import javax.inject.Inject;
 public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View> implements InterventionsMvvm.ViewModel<InterventionsMvvm.View> {
 
     private InterventionDao dao;
-    private boolean noInterventions = true;
+    private boolean noInterventionsLogged = true;
 
     @Inject
     public InterventionsViewModel(@AppContext Context context) {
@@ -47,23 +52,21 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
         return ivList;
     }
 
+    public void checkInterventions() {
+        this.noInterventionsLogged = (getInterventions().size() == 0);
+        notifyPropertyChanged(BR.noInterventionsLogged);
+    }
+
     @Bindable
-    public boolean getNoInterventions() {
-        this.noInterventions = (getInterventions().size() == 0);
-        return this.noInterventions;
+    public boolean getNoInterventionsLogged() {
+        this.checkInterventions();
+        return this.noInterventionsLogged;
     }
 
     @Override
-    public void addIntervention() {
-        Bundle b = new Bundle();
-        navigator.get().startActivity(ActivityIntervention.class, b);
-//        App.getEventBus().post(new Events.DayAdded(day));
-    }
-
-    @Override
-    public void onInterventionClick(Intervention iv) {
-        Bundle b = new Bundle();
-        b.putLong(ActivityIntervention.BUNDLE_KEY_INTERVENTION_ID, iv.getId());
-        navigator.get().startActivity(ActivityIntervention.class, b);
+    public void onInterventionClick(Intervention iv, View view) {
+        Intent detailIntent = new Intent(view.getContext(), ActivityIntervention.class);
+        detailIntent.putExtra("keyId", iv.getId());
+        view.getContext().startActivity(detailIntent);
     }
 }

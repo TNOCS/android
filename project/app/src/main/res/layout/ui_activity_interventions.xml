@@ -37,7 +37,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="@string/noInterventionsLogged"
-            android:visibility="@{vm.noInterventions ? View.VISIBLE : View.GONE}"
+            android:visibility="@{vm.noInterventionsLogged ? View.VISIBLE : View.GONE}"
             style="@style/ListItemPrimary" />
 
 
