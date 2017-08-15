@@ -1,47 +1,33 @@
 package org.owntracks.android.activities;
 
-import android.app.Activity;
-import android.app.DialogFragment;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.location.Location;
+import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.TimePicker;
-import android.widget.Toast;
 
-import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
-import com.google.android.gms.common.GooglePlayServicesRepairableException;
-import com.google.android.gms.location.places.*;
-import com.google.android.gms.location.places.ui.PlacePicker;
-import com.google.android.gms.maps.model.LatLng;
-
-import org.owntracks.android.App;
 import org.owntracks.android.R;
 import org.owntracks.android.databinding.ActivityInterventionBinding;
 import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Intervention;
 import org.owntracks.android.db.InterventionDao;
-import org.owntracks.android.support.SimpleTextChangeListener;
 import org.owntracks.android.services.ServiceProxy;
-import org.owntracks.android.support.Events;
-import org.owntracks.android.support.Preferences;
+import org.owntracks.android.support.SimpleTextChangeListener;
 import org.owntracks.android.support.widgets.HourMinute;
 import org.owntracks.android.support.widgets.Toasts;
-
-import java.util.Calendar;
-import java.util.Date;
 
 import timber.log.Timber;
 
 
-public class ActivityIntervention extends ActivityBase implements View.OnClickListener {
+public class ActivityIntervention extends ActivityBase implements View.OnClickListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = "ActivityIntervention";
     public static final String BUNDLE_KEY_INTERVENTION_ID = "BUNDLE_KEY_INTERVENTION_ID";
 
@@ -51,6 +37,7 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
 
     private MenuItem saveButton;
     private ActivityInterventionBinding binding;
+    private String[] interventionTypes = new String[]{"No interventions defined"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,11 +67,26 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
             this.iv.setDefaults();
         }
 
+        this.initializeSpinner();
+
         binding.startTime.setOnClickListener(this);
         binding.endTime.setOnClickListener(this);
 
         binding.setItem(this.iv);
+
         setupListenerAndRequiredFields();
+    }
+
+    private void initializeSpinner() {
+        this.interventionTypes = getResources().getStringArray(R.array.intervention_types);
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, this.interventionTypes); //selected item will look like a spinner set from XML
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerIvtype.setAdapter(spinnerArrayAdapter);
+        binding.spinnerIvtype.setOnItemSelectedListener(this);
+        if (this.iv.getIvtype() == null) return;
+        int pos = spinnerArrayAdapter.getPosition(this.iv.getIvtype());
+        binding.spinnerIvtype.setSelection(pos);
+
     }
 
     private void setupListenerAndRequiredFields() {
@@ -94,21 +96,16 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
                 conditionallyEnableSaveButton();
             }
         };
-
         binding.description.addTextChangedListener(requiredForSave);
-//        binding.from.addTextChangedListener(requiredForSave);
-//        binding.to.addTextChangedListener(requiredForSave);
-
     }
 
     private void conditionallyEnableSaveButton() {
-
-        boolean enabled;
+        boolean enabled = true;
         try {
-//            enabled = (binding.description.getText().toString().length() > 0)
-//                    && (binding.from.getText().toString().length() > 0)
-//                    && (binding.to.getText().toString().length() > 0);
-enabled = true;
+            if (binding.spinnerIvtype.getSelectedItem() == null) enabled = false;
+            if (iv.getFrom() == null) enabled = false;
+            if (iv.getTo() == null) enabled = false;
+            if (iv.getFrom() >= iv.getTo()) enabled = false;
         } catch (Exception e) {
             enabled = false; // invalid input or NumberFormatException result in no valid input
         }
@@ -181,7 +178,7 @@ enabled = true;
                 pickTime(hm.getHour(), hm.getMinute(), true);
                 break;
             case R.id.endTime:
-                hm = HourMinute.fromMillis(iv.getFrom());
+                hm = HourMinute.fromMillis(iv.getTo());
                 pickTime(hm.getHour(), hm.getMinute(), false);
                 break;
             default:
@@ -208,6 +205,9 @@ enabled = true;
                                     iv.setFrom(iv.getTo() - 60 * 60 * 1000); //Auto fill end time with -1 hour
                                 }
                             }
+                            if (iv.getFrom() >= iv.getTo()) Toasts.showEndTimeBeforeStart();
+                            binding.setItem(iv);
+                            conditionallyEnableSaveButton();
                         }
                     }, hour, minute, true);
             timePickerDialog.show();
@@ -231,8 +231,6 @@ enabled = true;
         else {
             add(iv);
         }
-
-
     }
 
     // If the user hits back, go back to ActivityMain, no matter where he came from
@@ -250,5 +248,19 @@ enabled = true;
     public void onPause() {
         super.onPause();
 
+    }
+
+    @Override
+    public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+        Object item = adapterView.getItemAtPosition(i);
+        if (item == null) return;
+        this.iv.setIvtype((String) item);
+        conditionallyEnableSaveButton();
+    }
+
+    @Override
+    public void onNothingSelected(AdapterView<?> adapterView) {
+        this.iv.setIvtype(null);
+        conditionallyEnableSaveButton();
     }
 }

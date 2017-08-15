@@ -25,6 +25,9 @@ public class Toasts {
 
     }
 
+    public static void showEndTimeBeforeStart() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.endBeforeStart), Toast.LENGTH_SHORT).show();
+    }
 
     private static Toast stateChangeToast;
     public static void showEndpointStateChange(ServiceMessage.EndpointState state) {

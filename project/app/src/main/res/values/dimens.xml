@@ -9,4 +9,6 @@
     <!--Welcome sliding page  -->
     <dimen name="welcome_content_min_height">96dp</dimen>
 
+    <dimen name="set_time_rows_height">48dp</dimen>
+
 </resources>

@@ -36,6 +36,13 @@ public class HourMinute {
         this.minute = minute;
     }
 
+    public String toString() {
+        if (hour >= 0 && minute >= 0)
+            return String.format("%d:%d", hour, minute);
+        else
+            return "??:??";
+    }
+
     // Construct HourMinute object from milliseconds, revert to current time if null
     public Long toMillis() {
         Calendar c = Calendar.getInstance();

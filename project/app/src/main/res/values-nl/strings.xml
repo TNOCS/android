@@ -31,4 +31,5 @@
     <string name="endTime">Eindtijd</string>
     <string name="set">Stel in</string>
     <string name="saveIntervention">Bewaar interventie</string>
+    <string name="endBeforeStart">Eindtijd kan niet eerder zijn dan de starttijd</string>
 </resources>

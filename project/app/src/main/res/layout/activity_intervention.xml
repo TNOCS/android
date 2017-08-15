@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
     <data>
         <import type="android.view.View"/>
+        <import type="org.owntracks.android.support.CustomBindingAdapters"/>
         <variable name="item" type="org.owntracks.android.db.Intervention"/>
     </data>
 
@@ -28,28 +29,7 @@
 
             <RelativeLayout
                 android:layout_width="fill_parent"
-                android:layout_height="112dp">
-
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="@string/description"
-                    app:met_floatingLabel="normal"
-                    app:met_underlineColor="#82FFFFFF"
-                    app:met_floatingLabelTextColor="#82FFFFFF"
-                    app:met_primaryColor="#FFFFFF"
-                    app:met_textColor="#FFFFFF"
-                    app:met_textColorHint="#82FFFFFF"
-                    android:background="@android:color/transparent"
-                    android:textCursorDrawable="@drawable/cursor_white"
-                    android:gravity="bottom"
-                    android:inputType="textVisiblePassword"
-                    android:textSize="24sp"
-                    android:id="@+id/description"
-                    android:layout_alignParentBottom="true"
-                    android:layout_alignParentLeft="true"
-                    android:layout_alignParentStart="true"
-                    android:text="@{item.description}"/>
+                android:layout_height="wrap_content">
             </RelativeLayout>
 
         </android.support.v7.widget.Toolbar>
@@ -67,74 +47,96 @@
                 android:orientation="vertical"
                 android:layout_marginEnd="@dimen/default_spacing"
                 android:layout_marginRight="@dimen/default_spacing">
-                <com.rengwuxian.materialedittext.MaterialEditText
-                    android:layout_marginLeft="@dimen/default_spacing_half"
-                    android:layout_marginStart="@dimen/default_spacing_half"
-                    app:met_iconLeft="@drawable/ic_location"
-                    android:layout_marginTop="20dp"
+
+
+                <Spinner
+                    android:id="@+id/spinnerIvtype"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="@string/latitude"
-                    app:met_floatingLabel="normal"
+                    android:layout_marginLeft="@dimen/default_spacing_half"
+                    android:layout_marginStart="@dimen/default_spacing_half"
+                    android:layout_marginTop="20dp"/>
+
+                <com.rengwuxian.materialedittext.MaterialEditText
+                    android:id="@+id/description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/default_spacing_half"
+                    android:layout_marginStart="@dimen/default_spacing_half"
+                    android:layout_marginTop="20dp"
+                    android:hint="@string/description"
+                    android:inputType="text"
+                    android:text="@{item.description}"
                     app:met_baseColor="@color/textPrimary"
-                    app:met_primaryColor="@color/accent"
-                    android:id="@+id/latitude"
-                    android:inputType="textVisiblePassword"
-                    android:text="@{item.ivtype}"
-                    app:met_helperText=""/>
+                    app:met_floatingLabel="normal"
+                    app:met_helperText=""
+                    app:met_iconLeft="@drawable/ic_description_black_24dp"
+                    app:met_primaryColor="@color/accent" />
 
                 <RelativeLayout
                     android:id="@+id/startTimeWrapper"
                     android:orientation="vertical"
                     android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="76dp"
-                    android:layout_marginStart="76dp">
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp">
+
+                    <TextView
+                        android:id="@+id/descStartTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/set_time_rows_height"
+                        android:layout_alignParentLeft="true"
+                        android:gravity="center_vertical"
+                        android:text="@string/startTime"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/set_time_rows_height"
+                        android:layout_toLeftOf="@+id/startTime"
+                        android:layout_marginRight="24dp"
                         android:gravity="center_vertical"
-                        android:text="@string/startTime"
+                        android:text="@{CustomBindingAdapters.longToTimeStr(item.from)}"
                         android:textSize="18sp"
-                        android:id="@+id/descStartTime"/>
+                        android:id="@+id/startTimeText"/>
 
                     <Button
                         android:id="@+id/startTime"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_height="@dimen/set_time_rows_height"
                         android:layout_alignParentEnd="true"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
                         android:layout_gravity="end"
-                        android:text="set" />
-                </RelativeLayout>
+                        android:text="@string/set" />
 
-                <RelativeLayout
-                    android:id="@+id/endTimeWrapper"
-                    android:orientation="vertical"
-                    android:layout_width="match_parent"
-                    android:layout_height="48dp"
-                    android:layout_marginLeft="76dp"
-                    android:layout_marginStart="76dp">
+
+                    <TextView
+                        android:id="@+id/descEndTime"
+                        android:layout_width="wrap_content"
+                        android:layout_height="@dimen/set_time_rows_height"
+                        android:layout_below="@+id/descStartTime"
+                        android:gravity="center_vertical"
+                        android:text="@string/endTime"
+                        android:textSize="18sp" />
 
                     <TextView
                         android:layout_width="wrap_content"
-                        android:layout_height="match_parent"
+                        android:layout_height="@dimen/set_time_rows_height"
+                        android:layout_below="@+id/startTimeText"
+                        android:layout_alignRight="@+id/startTimeText"
                         android:gravity="center_vertical"
-                        android:text="@string/endTime"
+                        android:text="@{CustomBindingAdapters.longToTimeStr(item.to)}"
                         android:textSize="18sp"
-                        android:id="@+id/descEndTime"/>
+                        android:id="@+id/endTimeText"/>
 
                     <Button
                         android:id="@+id/endTime"
                         android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_alignParentEnd="true"
+                        android:layout_height="@dimen/set_time_rows_height"
+                        android:layout_below="@+id/startTime"
                         android:layout_alignParentRight="true"
-                        android:layout_centerVertical="true"
                         android:layout_gravity="end"
-                        android:text="set" />
+                        android:text="@string/set" />
                 </RelativeLayout>
             </LinearLayout>
         </ScrollView>
