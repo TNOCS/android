@@ -52,7 +52,7 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
 
     @Override
     public void onClick(@NonNull Intervention object, @NonNull View view, boolean longClick) {
-        viewModel.onInterventionClick(object, view);
+        viewModel.onInterventionClick(object, view, longClick);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {

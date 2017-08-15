@@ -10,7 +10,7 @@ public class CustomBindingAdapters {
 
     @BindingConversion
     public static String longToTimeStr(Long value) {
-        HourMinute hm = HourMinute.fromMillis(value);
+        HourMinute hm = HourMinute.fromMillis(value, false);
         return hm.toString();
     }
 

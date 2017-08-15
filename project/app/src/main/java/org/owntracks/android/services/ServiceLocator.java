@@ -10,8 +10,10 @@ import org.greenrobot.eventbus.ThreadMode;
 import org.owntracks.android.App;
 import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Day;
+import org.owntracks.android.db.Intervention;
 import org.owntracks.android.db.Waypoint;
 import org.owntracks.android.db.WaypointDao;
+import org.owntracks.android.messages.MessageIntervention;
 import org.owntracks.android.messages.MessageLocation;
 import org.owntracks.android.messages.MessageTransition;
 import org.owntracks.android.messages.MessageWaypoint;
@@ -479,8 +481,20 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
 
     @SuppressWarnings("unused")
     @Subscribe(threadMode = ThreadMode.BACKGROUND)
-    public void onEvent(Events.DayAdded e) {
-        handleDay(e.getDay(), false, false);
+    public void onEvent(Events.InterventionAdded e) {
+        handleIntervention(e.getIntervention(), false, false);
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onEvent(Events.InterventionUpdated e) {
+        handleIntervention(e.getIntervention(), true, false);
+    }
+
+    @SuppressWarnings("unused")
+    @Subscribe(threadMode = ThreadMode.BACKGROUND)
+    public void onEvent(Events.InterventionRemoved e) {
+        handleIntervention(e.getIntervention(), false, true);
     }
 
     @SuppressWarnings("unused")
@@ -522,9 +536,14 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
     }
 
 
-    private void handleDay(Day d, boolean update, boolean remove) {
-        //TODO;
-        return;
+    private void handleIntervention(Intervention iv, boolean update, boolean remove) {
+        Timber.v("handleIntervention u:" +update + " r:"+remove);
+        if(update && remove)
+            throw new IllegalArgumentException("update and remove cannot be true at the same time");
+
+        MessageIntervention message = MessageIntervention.fromDaoObject(iv);
+        message._custom_endpoint = true; // Send it to the json webservice
+        ServiceProxy.getServiceMessage().sendMessage(message);
     }
 
     private void handleWaypoint(Waypoint w, boolean update, boolean remove) {

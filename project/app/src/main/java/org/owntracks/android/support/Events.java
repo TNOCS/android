@@ -3,6 +3,7 @@ package org.owntracks.android.support;
 import java.util.Date;
 
 import org.owntracks.android.db.Day;
+import org.owntracks.android.db.Intervention;
 import org.owntracks.android.db.Waypoint;
 import org.owntracks.android.model.FusedContact;
 import org.owntracks.android.model.GeocodableLocation;
@@ -121,6 +122,48 @@ public class Events {
 		}
 
 	}
+
+    public static class InterventionAdded extends E {
+        final Intervention intervention;
+
+        public InterventionAdded(Intervention intervention) {
+            super();
+            this.intervention = intervention;
+        }
+
+        public Intervention getIntervention() {
+            return this.intervention;
+        }
+
+    }
+
+    public static class InterventionRemoved extends E {
+        final Intervention intervention;
+
+        public InterventionRemoved(Intervention intervention) {
+            super();
+            this.intervention = intervention;
+        }
+
+        public Intervention getIntervention() {
+            return this.intervention;
+        }
+
+    }
+
+    public static class InterventionUpdated extends E {
+        final Intervention intervention;
+
+        public InterventionUpdated(Intervention intervention) {
+            super();
+            this.intervention = intervention;
+        }
+
+        public Intervention getIntervention() {
+            return this.intervention;
+        }
+
+    }
 
 	public static class DayAdded extends E {
 		final Day day;

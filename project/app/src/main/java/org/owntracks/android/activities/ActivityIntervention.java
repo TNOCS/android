@@ -14,12 +14,14 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TimePicker;
 
+import org.owntracks.android.App;
 import org.owntracks.android.R;
 import org.owntracks.android.databinding.ActivityInterventionBinding;
 import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Intervention;
 import org.owntracks.android.db.InterventionDao;
 import org.owntracks.android.services.ServiceProxy;
+import org.owntracks.android.support.Events;
 import org.owntracks.android.support.SimpleTextChangeListener;
 import org.owntracks.android.support.widgets.HourMinute;
 import org.owntracks.android.support.widgets.Toasts;
@@ -135,7 +137,7 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
     private void add(Intervention i) {
         long id = this.dao.insert(i);
         Log.v(TAG, "added intervention with id: " + id);
-//        App.getEventBus().post(new Events.WaypointAdded(w)); // For ServiceLocator update
+        App.getEventBus().post(new Events.InterventionAdded(iv)); // For ServiceLocator update
         //App.getEventBus().postSticky(new Events.WaypointAddedByUser(w)); // For UI update
     }
 
@@ -174,11 +176,11 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         HourMinute hm;
         switch (v.getId()) {
             case R.id.startTime:
-                hm = HourMinute.fromMillis(iv.getFrom());
+                hm = HourMinute.fromMillis(iv.getFrom(), true);
                 pickTime(hm.getHour(), hm.getMinute(), true);
                 break;
             case R.id.endTime:
-                hm = HourMinute.fromMillis(iv.getTo());
+                hm = HourMinute.fromMillis(iv.getTo(), true);
                 pickTime(hm.getHour(), hm.getMinute(), false);
                 break;
             default:
@@ -219,10 +221,6 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
 
     private void save() {
         Intervention iv = this.iv;
-
-        if (!update) {
-//            w.setModeId(Preferences.getModeId());
-        }
 
         iv.setDescription(binding.description.getText().toString());
 

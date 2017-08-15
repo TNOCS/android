@@ -210,7 +210,7 @@ public class ServiceMessage implements ProxyableService, IncomingMessageProcesso
 
         Log.v(TAG, "onMessageQueued()- messageId:" + m.getMessageId()+", queueLength:"+outgoingQueue.size());
         if(m instanceof MessageLocation && MessageLocation.REPORT_TYPE_USER.equals(MessageLocation.class.cast(m).getT()))
-            Toasts.showMessageQueued();
+            Toasts.showMessageQueued(outgoingQueue.size());
     }
 
     public void onMessageDeliveryFailed(Long messageId) {

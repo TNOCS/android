@@ -46,8 +46,8 @@ public class Toasts {
         Toast.makeText(App.getContext(), App.getContext().getString(R.string.contactLocationUnknown), Toast.LENGTH_SHORT).show();
     }
 
-    public static void showMessageQueued() {
-        Toast.makeText(App.getContext(), App.getContext().getString(R.string.messageQueued), Toast.LENGTH_SHORT).show();
+    public static void showMessageQueued(int nr) {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.messageQueued) + ": " + Integer.toString(nr), Toast.LENGTH_SHORT).show();
     }
 
     public static void showEndpointNotConfigured() {

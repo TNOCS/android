@@ -38,9 +38,9 @@ public class HourMinute {
 
     public String toString() {
         if (hour >= 0 && minute >= 0)
-            return String.format("%d:%d", hour, minute);
+            return String.format("%d:%2d", hour, minute).replace(" ", "0");
         else
-            return "??:??";
+            return "--:--";
     }
 
     // Construct HourMinute object from milliseconds, revert to current time if null
@@ -52,12 +52,16 @@ public class HourMinute {
     }
 
     // Construct HourMinute object from milliseconds, revert to current time if null
-    public static HourMinute fromMillis(Long millis) {
+    public static HourMinute fromMillis(Long millis, boolean fallbackToCurrent) {
         HourMinute result = new HourMinute();
         Calendar c = Calendar.getInstance();
-        if (millis != null) c.setTimeInMillis(millis);
-        result.setHour(c.get(Calendar.HOUR_OF_DAY));
-        result.setMinute(c.get(Calendar.MINUTE));
+        if (millis != null) {
+            c.setTimeInMillis(millis);
+        }
+        if (millis != null || fallbackToCurrent) {
+            result.setHour(c.get(Calendar.HOUR_OF_DAY));
+            result.setMinute(c.get(Calendar.MINUTE));
+        }
         return result;
     }
 }

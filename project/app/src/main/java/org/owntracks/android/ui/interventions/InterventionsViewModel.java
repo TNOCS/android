@@ -64,9 +64,13 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
     }
 
     @Override
-    public void onInterventionClick(Intervention iv, View view) {
-        Intent detailIntent = new Intent(view.getContext(), ActivityIntervention.class);
-        detailIntent.putExtra("keyId", iv.getId());
-        view.getContext().startActivity(detailIntent);
+    public void onInterventionClick(Intervention iv, View view, boolean longClick) {
+        if (longClick == false) {
+            Intent detailIntent = new Intent(view.getContext(), ActivityIntervention.class);
+            detailIntent.putExtra("keyId", iv.getId());
+            view.getContext().startActivity(detailIntent);
+        } else {
+            //TODO
+        }
     }
 }

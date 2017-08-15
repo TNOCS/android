@@ -36,6 +36,9 @@ public abstract class MessageBase extends BaseObservable implements PausableThre
         protected String _mqtt_topic_base;
 
         @JsonIgnore
+        public boolean _custom_endpoint = false;
+
+        @JsonIgnore
         public long getMessageId() {
                 return _messageId;
         }

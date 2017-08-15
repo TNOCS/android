@@ -248,9 +248,10 @@ public class ActivityPreferencesConnection extends ActivityBase {
                                 public void onPositive(MaterialDialog dialog) {
                                     MaterialDialog d = MaterialDialog.class.cast(dialog);
                                     final MaterialEditText url = (MaterialEditText) d.findViewById(R.id.url);
-
+                                    final MaterialEditText customUrl = (MaterialEditText) d.findViewById(R.id.customUrl);
 
                                     Preferences.setUrl(url.getText().toString());
+                                    Preferences.setCustomUrl(customUrl.getText().toString());
                                 }
                             })
 

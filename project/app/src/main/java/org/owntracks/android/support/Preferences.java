@@ -75,6 +75,8 @@ public class Preferences {
 
         // Use the android device UID to identify the device: https://stackoverflow.com/a/2785493/2788197
         deviceUUID = Secure.getString(App.getContext().getContentResolver(), Secure.ANDROID_ID);
+//        setDeviceId(getDeviceId());
+//        setUsername(getDeviceId());
 
         initMode(sharedPreferences.getInt(Keys.MODE_ID, getIntResource(R.integer.valModeId)));
     }
@@ -1003,7 +1005,15 @@ public class Preferences {
         return getString(Keys._ENCRYPTION_KEY, R.string.valEmpty);
     }
 
+    @Import(key =Keys.CUSTOM_URL)
+    public static void setCustomUrl(String customUrl) {
+        setString(Keys.CUSTOM_URL, customUrl);
+    }
 
+    @Export(key = Keys.CUSTOM_URL, exportModeHttpPrivate = true)
+    public static String getCustomUrl() {
+        return getString(Keys.CUSTOM_URL, R.string.valHttpServerCustomEndpoint);
+    }
 
     public static boolean getSetupCompleted() {
         // sharedPreferences because the value is independent from the selected mode
@@ -1092,6 +1102,7 @@ public class Preferences {
         public static final String CLEAN_SESSION                    = "cleanSession";
         public static final String CLIENT_ID                        = "clientId";
         public static final String CP                               = "cp";
+        public static final String CUSTOM_URL                       = "customUrl";
         public static final String DEVICE_ID                        = "deviceId";
         public static final String HOST                             = "host";
         public static final String HTTP_SCHEDULER_DIRECT            = "httpSchedulerConsiderStrategyDirect";

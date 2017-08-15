@@ -23,5 +23,20 @@
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
 
+    <com.rengwuxian.materialedittext.MaterialEditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:met_baseColor="@color/textPrimary"
+        app:met_primaryColor="@color/accent"
+        android:id="@+id/customUrl"
+        android:inputType="textUri|textNoSuggestions"
+        app:met_floatingLabel="highlight"
+        app:met_floatingLabelText="@string/preferencesUrl"
+        android:hint="@string/preferencesCustomUrl"
+        android:layout_alignParentLeft="true"
+        android:layout_below="@+id/url"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+
 
 </RelativeLayout>

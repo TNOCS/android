@@ -65,6 +65,7 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
     private static String headerDevice;
 
     private String endpointUrl;
+    private String customEndpointUrl;
     private String endpointUserInfo;
 
     private static OkHttpClient mHttpClient;
@@ -127,6 +128,19 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
             Timber.v("Error setting endpoint url: %s", this.endpointUrl );
             return;
         }
+
+        URL customEndpoint;
+        try {
+            customEndpoint = new URL(Preferences.getCustomUrl());
+            service.onEndpointStateChanged(EndpointState.IDLE);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            service.onEndpointStateChanged(EndpointState.ERROR_CONFIGURATION);
+            Timber.v("Error setting endpoint url: %s", this.customEndpointUrl );
+            return;
+        }
+
+        this.customEndpointUrl = customEndpoint.toString();
 
         this.endpointUserInfo = endpoint.getUserInfo();
 
@@ -305,19 +319,31 @@ e.printStackTrace();                } catch (Parser.EncryptionException e) {
         ServiceProxy.getServiceMessage().onMessageReceived(message);
     }
 
+    private String chooseEndpoint(@NonNull MessageBase message) {
+        if (message._custom_endpoint == true) {
+            String customUrl = this.customEndpointUrl;
+            customUrl += "/" + Preferences.getUsername();
+            customUrl = customUrl.replace("//", "/");
+            return customUrl;
+        } else {
+            return this.endpointUrl;
+        }
+    }
 
     private boolean prepareAndPostDirect(String wireMessage, @NonNull MessageBase message) {
         Timber.v("messageId:%s", message.getMessageId());
-        postMessage(wireMessage, this.endpointUrl, this.endpointUserInfo, context, message.getMessageId());
+        String endpoint = chooseEndpoint(message);
+        postMessage(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId());
         return true;
     }
 
     private boolean prepareAndPostIndirect(String wireMessage, @NonNull MessageBase message) {
         Timber.v("messageId:%s", message.getMessageId());
         Bundle b = new Bundle();
+        String endpoint = chooseEndpoint(message);
 
         b.putString(ServiceMessageHttpGcm.BUNDLE_KEY_USERINFO, this.endpointUserInfo);
-        b.putString(ServiceMessageHttpGcm.BUNDLE_KEY_URL, this.endpointUrl);
+        b.putString(ServiceMessageHttpGcm.BUNDLE_KEY_URL, endpoint);
         b.putLong(ServiceMessageHttpGcm.BUNDLE_KEY_MESSAGE_ID, message.getMessageId());
         b.putString(ServiceMessageHttpGcm.BUNDLE_KEY_REQUEST_BODY, wireMessage);
 
