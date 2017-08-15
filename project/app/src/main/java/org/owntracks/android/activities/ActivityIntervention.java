@@ -3,7 +3,6 @@ package org.owntracks.android.activities;
 import android.app.TimePickerDialog;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
-import android.databinding.ObservableField;
 import android.os.Bundle;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -85,8 +84,8 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         binding.spinnerIvtype.setAdapter(spinnerArrayAdapter);
         binding.spinnerIvtype.setOnItemSelectedListener(this);
-        if (this.iv.getIvtype() == null) return;
-        int pos = spinnerArrayAdapter.getPosition(this.iv.getIvtype());
+        if (this.iv.getType() == null) return;
+        int pos = spinnerArrayAdapter.getPosition(this.iv.getType());
         binding.spinnerIvtype.setSelection(pos);
 
     }
@@ -95,10 +94,11 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         TextWatcher requiredForSave = new SimpleTextChangeListener() {
             @Override
             public void onChanged(String s) {
+                iv.setComment(binding.comment.getText().toString());
                 conditionallyEnableSaveButton();
             }
         };
-        binding.description.addTextChangedListener(requiredForSave);
+        binding.comment.addTextChangedListener(requiredForSave);
     }
 
     private void conditionallyEnableSaveButton() {
@@ -222,7 +222,7 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
     private void save() {
         Intervention iv = this.iv;
 
-        iv.setDescription(binding.description.getText().toString());
+        iv.setComment(binding.comment.getText().toString());
 
         if (update)
             update(iv);
@@ -252,13 +252,13 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Object item = adapterView.getItemAtPosition(i);
         if (item == null) return;
-        this.iv.setIvtype((String) item);
+        this.iv.setType((String) item);
         conditionallyEnableSaveButton();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        this.iv.setIvtype(null);
+        this.iv.setType(null);
         conditionallyEnableSaveButton();
     }
 }

@@ -68,7 +68,7 @@
     <string name="preferencesLocatorAccuracyForegroundSummary">Accuracy and power usage in the foreground</string>
     <string name="preferencesRemoteCommand">Remote commands</string>
     <string name="preferencesRemoteCommandSummary">Enable remote commands</string>
-    <string name="description">Description</string>
+    <string name="comment">Description</string>
     <string name="latitude">Latitude</string>
     <string name="longitude">Longitude</string>
     <string name="radius">Radius</string>

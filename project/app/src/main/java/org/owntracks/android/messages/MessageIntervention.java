@@ -1,19 +1,15 @@
 package org.owntracks.android.messages;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonInclude;
 
-import org.owntracks.android.db.Day;
 import org.owntracks.android.db.Intervention;
-import org.owntracks.android.db.Waypoint;
 import org.owntracks.android.support.IncomingMessageProcessor;
 import org.owntracks.android.support.OutgoingMessageProcessor;
 
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "_type")
 @JsonIgnoreProperties(ignoreUnknown = true)
@@ -24,9 +20,9 @@ public class MessageIntervention extends MessageBase{
 
     public String getBaseTopicSuffix() {  return BASETOPIC_SUFFIX; }
 
-    private String desc;
+    private String comment;
     private long tst;
-    private String ivType;
+    private String type;
     private Long from;
     private Long to;
 
@@ -46,20 +42,20 @@ public class MessageIntervention extends MessageBase{
         this.to = to;
     }
 
-    public String getIvType() {
-        return ivType;
+    public String getType() {
+        return type;
     }
 
-    public void setIvType(String ivType) {
-        this.ivType = ivType;
+    public void setType(String type) {
+        this.type = type;
     }
 
-    public String getDesc() {
-        return desc;
+    public String getComment() {
+        return comment;
     }
 
-    public void setDesc(String desc) {
-        this.desc = desc;
+    public void setComment(String comment) {
+        this.comment = comment;
     }
 
     public long getTst() {
@@ -84,18 +80,18 @@ public class MessageIntervention extends MessageBase{
     public Intervention toDaoObject() {
         Intervention iv = new Intervention();
 
-        iv.setDescription(getDesc());
+        iv.setComment(getComment());
         iv.setFrom(getFrom());
         iv.setTo(getTo());
-        iv.setIvtype(getIvType());
+        iv.setType(getType());
 
         return iv;
     }
 
     public static MessageIntervention fromDaoObject(Intervention iv) {
         MessageIntervention message = new MessageIntervention();
-        message.setDesc(iv.getDescription());
-        message.setIvType(iv.getIvtype());
+        message.setComment(iv.getComment());
+        message.setType(iv.getType());
         message.setFrom(iv.getFrom());
         message.setTo(iv.getTo());
         message.setTst(TimeUnit.MILLISECONDS.toSeconds(new Date().getTime()));
@@ -104,7 +100,7 @@ public class MessageIntervention extends MessageBase{
 
     @Override
     public boolean isValidMessage() {
-        return super.isValidMessage() && (desc != null);
+        return super.isValidMessage() && (to != null) && (from != null);
     }
 
 }

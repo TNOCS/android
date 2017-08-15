@@ -31,7 +31,7 @@
                 android:id="@+id/ivname"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="@{intervention.description}"
+                android:text="@{intervention.comment}"
                 android:ellipsize="end"
                 android:singleLine="true"
                 style="@style/ListItemPrimary" />

@@ -58,15 +58,15 @@
                     android:layout_marginTop="20dp"/>
 
                 <com.rengwuxian.materialedittext.MaterialEditText
-                    android:id="@+id/description"
+                    android:id="@+id/comment"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/default_spacing_half"
                     android:layout_marginStart="@dimen/default_spacing_half"
                     android:layout_marginTop="20dp"
-                    android:hint="@string/description"
+                    android:hint="@string/comment"
                     android:inputType="text"
-                    android:text="@{item.description}"
+                    android:text="@{item.comment}"
                     app:met_baseColor="@color/textPrimary"
                     app:met_floatingLabel="normal"
                     app:met_helperText=""

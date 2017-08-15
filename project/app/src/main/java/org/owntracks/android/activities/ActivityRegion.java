@@ -89,7 +89,7 @@ public class ActivityRegion extends ActivityBase  {
             }
         };
 
-        binding.description.addTextChangedListener(requiredForSave);
+        binding.comment.addTextChangedListener(requiredForSave);
         binding.latitude.addTextChangedListener(requiredForSave);
         binding.longitude.addTextChangedListener(requiredForSave);
 
@@ -100,7 +100,7 @@ public class ActivityRegion extends ActivityBase  {
 
         boolean enabled;
         try {
-            enabled = (binding.description.getText().toString().length() > 0)
+            enabled = (binding.comment.getText().toString().length() > 0)
                     && (binding.latitude.getText().toString().length() > 0)
                     && (binding.longitude.getText().toString().length() > 0);
 
@@ -249,7 +249,7 @@ public class ActivityRegion extends ActivityBase  {
             w.setDate(new java.util.Date());
         }
 
-        w.setDescription(binding.description.getText().toString());
+        w.setDescription(binding.comment.getText().toString());
         try {
             w.setGeofenceLatitude(Double.parseDouble(binding.latitude.getText().toString()));
             w.setGeofenceLongitude(Double.parseDouble(binding.longitude.getText().toString()));
