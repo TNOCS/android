@@ -59,6 +59,7 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.activity_interventions, menu);
         this.mMenu = menu;
+        this.mMenu.findItem(R.id.menu_addintervention).getIcon().setAlpha(255);
         return true;
     }
 

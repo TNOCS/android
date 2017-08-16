@@ -21,6 +21,7 @@ import org.owntracks.android.messages.MessageBase;
 import org.owntracks.android.messages.MessageClear;
 import org.owntracks.android.messages.MessageCmd;
 import org.owntracks.android.messages.MessageEvent;
+import org.owntracks.android.messages.MessageIntervention;
 import org.owntracks.android.messages.MessageLocation;
 import org.owntracks.android.messages.MessageTransition;
 import org.owntracks.android.messages.MessageWaypoint;
@@ -234,8 +235,6 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
             return GcmNetworkManager.RESULT_RESCHEDULE;
         }
 
-
-
         Request.Builder request = new Request.Builder().url(url).method("POST", RequestBody.create(JSON, body));
 
          if(userInfo != null) {
@@ -289,6 +288,73 @@ e.printStackTrace();                } catch (Parser.EncryptionException e) {
         }
     }
 
+    public static int deleteMessage(final String body, @Nullable final String url, @Nullable final String userInfo, final Context c, final Long messageId) {
+        Timber.v("url:%s, userInfo:%s, messageId:%s", url, userInfo,  messageId);
+
+        if(url == null) {
+            Timber.e("url not configured. messageId:%s", messageId);
+            return GcmNetworkManager.RESULT_FAILURE;
+        }
+
+        if(c instanceof ServiceMessageHttpGcm && mHttpClient == null) {
+            Timber.e("sevice not available. Binding and rescheduling GCM task");
+            ServiceProxy.bind(App.getContext());
+            return GcmNetworkManager.RESULT_RESCHEDULE;
+        }
+
+        Request.Builder request = new Request.Builder().url(url).method("DELETE", RequestBody.create(JSON, body));
+
+        if(userInfo != null) {
+            request.header(HEADER_AUTHORIZATION, "Basic " + android.util.Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP));
+        } else if(Preferences.getAuth()) {
+            request.header(HEADER_AUTHORIZATION, "Basic " + android.util.Base64.encodeToString((Preferences.getUsername()+":"+Preferences.getPassword()).getBytes(), Base64.NO_WRAP));
+
+        }
+
+        if(headerUsername != null) {
+            request.header(HEADER_USERNAME, headerUsername);
+        }
+        if(headerDevice != null) {
+            request.header(HEADER_DEVICE, headerDevice);
+        }
+
+        try {
+            Response r = mHttpClient.newCall(request.build()).execute();
+
+            if((r != null) && (r.isSuccessful())) {
+                Timber.v("got HTTP response");
+
+                try {
+                    //Timber.v("code: %s, streaming response to parser", r.body().string() );
+
+                    MessageBase[] result = Parser.fromJson(r.body().byteStream());
+                    ServiceProxy.getServiceMessage().onEndpointStateChanged(EndpointState.IDLE, "Response "+r.code() + ", " + result.length);
+
+                    for (MessageBase aResult : result) {
+                        onMessageReceived(aResult);
+                    }
+
+                    //Non JSON return value
+                } catch (IOException e) {
+                    ServiceProxy.getServiceMessage().onEndpointStateChanged(EndpointState.ERROR, "HTTP " +r.code() + ", JsonParseException");
+                    Timber.e("error:JsonParseException responseCode:%s", r.code());
+                    e.printStackTrace();                } catch (Parser.EncryptionException e) {
+
+                    ServiceProxy.getServiceMessage().onEndpointStateChanged(EndpointState.ERROR, "Response: "+r.code() + ", EncryptionException");
+                    Timber.e("error:EncryptionException");
+                }
+                return onMessageDelivered(c, messageId);
+            } else {
+                return onMessageDeliveryFailed(c, messageId);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            ServiceProxy.getServiceMessage().onEndpointStateChanged(EndpointState.ERROR, e);
+            return onMessageDeliveryFailed(c, messageId);
+        }
+    }
+
 
     private static int onMessageDelivered(@NonNull Context c, @Nullable Long messageId) {
         if(messageId == null || messageId == 0) {
@@ -323,6 +389,9 @@ e.printStackTrace();                } catch (Parser.EncryptionException e) {
         if (message._custom_endpoint == true) {
             String customUrl = this.customEndpointUrl;
             customUrl += "/" + Preferences.getUsername();
+            if (message._custom_CRUD == "D" && message instanceof MessageIntervention) {
+                customUrl += "/" + ((MessageIntervention) message).getId();
+            }
             customUrl = customUrl.replace("//", "/");
             return customUrl;
         } else {
@@ -333,7 +402,11 @@ e.printStackTrace();                } catch (Parser.EncryptionException e) {
     private boolean prepareAndPostDirect(String wireMessage, @NonNull MessageBase message) {
         Timber.v("messageId:%s", message.getMessageId());
         String endpoint = chooseEndpoint(message);
-        postMessage(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId());
+        if (message._custom_CRUD != null && message._custom_CRUD == "D") {
+            deleteMessage(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId());
+        } else {
+            postMessage(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId());
+        }
         return true;
     }
 

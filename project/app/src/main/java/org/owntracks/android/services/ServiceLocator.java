@@ -543,6 +543,9 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
 
         MessageIntervention message = MessageIntervention.fromDaoObject(iv);
         message._custom_endpoint = true; // Send it to the json webservice
+        if (remove) {
+            message._custom_CRUD = "D"; // Delete it
+        }
         ServiceProxy.getServiceMessage().sendMessage(message);
     }
 

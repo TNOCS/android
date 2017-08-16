@@ -152,6 +152,7 @@
     <string name="aLocation">a region</string>
     <string name="events">Events</string>
     <string name="notificationMessageTitle">Messages</string>
+    <string name="messageSent">Message sent. Remaining:</string>
     <string name="beaconUUID" translatable="false">Beacon UUID</string>
     <string name="beaconMajor" translatable="false">Beacon major</string>
     <string name="beaconMinor" translatable="false">Beacon minor</string>
@@ -269,5 +270,8 @@
     <string name="saveIntervention">Save intervention</string>
     <string name="endBeforeStart">End time cannot be earlier than start time</string>
     <string name="valHttpServerCustomEndpoint" translatable="false">http://134.221.20.240:3080/api/v1/interventions</string>
+    <string name="othertype">Custom intervention</string>
+    <string name="delete_intervention">Delete intervention</string>
+    <string name="delete_intervention_quest">Are you sure you want to delete this intervention?</string>
 
 </resources>

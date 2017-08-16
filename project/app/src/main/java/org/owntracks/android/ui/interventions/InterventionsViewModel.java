@@ -1,11 +1,14 @@
 package org.owntracks.android.ui.interventions;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.Bindable;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
 
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -14,6 +17,7 @@ import android.view.View;
 import com.android.databinding.library.baseAdapters.BR;
 
 import org.owntracks.android.App;
+import org.owntracks.android.R;
 import org.owntracks.android.activities.ActivityIntervention;
 import org.owntracks.android.activities.ActivityRegion;
 import org.owntracks.android.db.Dao;
@@ -57,6 +61,13 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
         notifyPropertyChanged(BR.noInterventionsLogged);
     }
 
+    public void deleteIntervention(Long id) {
+        InterventionDao dao = Dao.getInterventionDao();
+        Intervention iv = dao.loadByRowId(id);
+        dao.deleteByKey(id);
+        App.getEventBus().post(new Events.InterventionRemoved(iv)); // For ServiceLocator update
+    }
+
     @Bindable
     public boolean getNoInterventionsLogged() {
         this.checkInterventions();
@@ -70,7 +81,23 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
             detailIntent.putExtra("keyId", iv.getId());
             view.getContext().startActivity(detailIntent);
         } else {
-            //TODO
+            final Long ivId = iv.getId();
+            AlertDialog.Builder builder;
+            builder = new AlertDialog.Builder(view.getContext());
+            builder.setTitle(view.getResources().getString(R.string.delete_intervention))
+                    .setMessage(view.getResources().getString(R.string.delete_intervention_quest))
+                    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            deleteIntervention(ivId);
+                        }
+                    })
+                    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            // do nothing
+                        }
+                    })
+                    .setIcon(R.drawable.ic_warning_black_24dp)
+                    .show();
         }
     }
 }

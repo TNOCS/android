@@ -143,6 +143,7 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
 
     private void update(Intervention i) {
         this.dao.update(i);
+        App.getEventBus().post(new Events.InterventionUpdated(iv)); // For ServiceLocator update
 //        App.getEventBus().post(new Events.WaypointUpdated(w)); // For ServiceLocator update
         //App.getEventBus().postSticky(new Events.WaypointUpdatedByUser(w)); // For UI update
     }

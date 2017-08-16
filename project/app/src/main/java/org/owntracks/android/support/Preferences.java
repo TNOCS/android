@@ -75,10 +75,14 @@ public class Preferences {
 
         // Use the android device UID to identify the device: https://stackoverflow.com/a/2785493/2788197
         deviceUUID = Secure.getString(App.getContext().getContentResolver(), Secure.ANDROID_ID);
-//        setDeviceId(getDeviceId());
-//        setUsername(getDeviceId());
 
         initMode(sharedPreferences.getInt(Keys.MODE_ID, getIntResource(R.integer.valModeId)));
+        initPoliceTracks();
+    }
+
+    public static void initPoliceTracks() {
+        setDeviceId(getDeviceId());
+        setUsername(getDeviceId());
     }
 
 
@@ -163,14 +167,6 @@ public class Preferences {
         void onAttachAfterModeChanged();
     }
 
-
-
-
-
-
-
-
-
     //public static String getContactKey(int resId) {
     //    return App.getContext().getString(resId);
     //}
@@ -252,6 +248,10 @@ public class Preferences {
             Timber.e("setting of key denied in the current mode: " + key);
             return;
         }
+        if (activeSharedPreferences == null) {
+            Timber.w("activeSharedPreferences is null, canoot set key: " + key);
+            return;
+        }
         activeSharedPreferences.edit().putString(key, value).apply();
     }
 
@@ -263,6 +263,10 @@ public class Preferences {
             Timber.e("setting of key denied in the current mode: " + key);
             return;
         }
+        if (activeSharedPreferences == null) {
+            Timber.w("activeSharedPreferences is null, canoot set key: " + key);
+            return;
+        }
         activeSharedPreferences.edit().putInt(key, value).apply();
     }
     public static void setBoolean(String key, boolean value) {
@@ -271,6 +275,10 @@ public class Preferences {
     public static void setBoolean(String key, boolean value, boolean allowSetWhenPublic) {
         if(isModeMqttPublic() && !allowSetWhenPublic) {
             Timber.e("setting of key denied in the current mode: " + key);
+            return;
+        }
+        if (activeSharedPreferences == null) {
+            Timber.w("activeSharedPreferences is null, canoot set key: " + key);
             return;
         }
         activeSharedPreferences.edit().putBoolean(key, value).apply();

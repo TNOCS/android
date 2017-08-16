@@ -32,4 +32,11 @@
     <string name="set">Stel in</string>
     <string name="saveIntervention">Bewaar interventie</string>
     <string name="endBeforeStart">Eindtijd kan niet eerder zijn dan de starttijd</string>
+    <string name="othertype">Andere interventie</string>
+    <string name="comment">Opmerking</string>
+    <string name="cancel"></string>
+    <string name="menuCurrentLoction">Actuele positie</string>
+    <string name="messageQueued">Bericht wacht op verzending</string>
+    <string name="mode_description">PoliceTracks kan op meerdere manieren verbinden. Kies de HTTP-privaat modus voor het experiment.</string>
+    <string name="mode_heading"></string>
 </resources>

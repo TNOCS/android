@@ -39,6 +39,9 @@ public abstract class MessageBase extends BaseObservable implements PausableThre
         public boolean _custom_endpoint = false;
 
         @JsonIgnore
+        public String _custom_CRUD;
+
+        @JsonIgnore
         public long getMessageId() {
                 return _messageId;
         }

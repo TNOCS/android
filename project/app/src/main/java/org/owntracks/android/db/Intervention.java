@@ -17,18 +17,20 @@ public class Intervention {
     private Long id;
 
     @NotNull
+    private String type;
     private String comment;
     private Long from;
     private Long to;
-    private String type;
+    private String created;
 
-    @Generated(hash = 1552697598)
-    public Intervention(Long id, @NotNull String comment, Long from, Long to, String type) {
+    @Generated(hash = 1597981105)
+    public Intervention(Long id, @NotNull String type, String comment, Long from, Long to, String created) {
         this.id = id;
+        this.type = type;
         this.comment = comment;
         this.from = from;
         this.to = to;
-        this.type = type;
+        this.created = created;
     }
 
     @Generated(hash = 768626443)
@@ -43,25 +45,33 @@ public class Intervention {
         return id;
     }
 
+    public String getCreated() {
+        return created;
+    }
+
+    public void setCreated(String created) {
+        this.created = created;
+    }
+
     public void setId(Long id) {
         this.id = id;
     }
 
+    @NotNull
     public String getType() {
         return type;
     }
 
-    public void setType(String type) {
+    /** Not-null value; ensure this value is available before it is saved to the database. */
+    public void setType(@NotNull String type) {
         this.type = type;
     }
 
-    @NotNull
     public String getComment() {
         return comment;
     }
 
-    /** Not-null value; ensure this value is available before it is saved to the database. */
-    public void setComment(@NotNull String comment) {
+    public void setComment(String comment) {
         this.comment = comment;
     }
 

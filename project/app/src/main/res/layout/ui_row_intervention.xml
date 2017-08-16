@@ -2,6 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android" xmlns:app="http://schemas.android.com/apk/res-auto" >
     <data>
         <import type="android.view.View"/>
+        <import type="org.owntracks.android.support.CustomBindingAdapters"/>
         <variable name="intervention" type="org.owntracks.android.db.Intervention" />
     </data>
 
@@ -15,27 +16,52 @@
         android:minHeight="72dp">
 
 
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/textview_container_iv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignWithParentIfMissing="true"
             android:layout_centerVertical="true"
             android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
             android:orientation="vertical"
             android:paddingBottom="16dp"
             android:paddingTop="16dp">
 
             <TextView
-
                 android:id="@+id/ivname"
-                android:layout_width="match_parent"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{intervention.comment}"
+                android:layout_alignParentLeft="true"
+                android:gravity="left"
+                android:layout_toLeftOf="@+id/ivfrom"
+                android:text="@{intervention.type}"
                 android:ellipsize="end"
                 android:singleLine="true"
                 style="@style/ListItemPrimary" />
 
-        </LinearLayout>
+            <TextView
+                android:id="@+id/ivfrom"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toLeftOf="@+id/ivto"
+                android:text="@{CustomBindingAdapters.longToTimeStr(intervention.from)}"
+                android:ellipsize="end"
+                android:singleLine="true"
+                style="@style/ListItemPrimary" />
+
+            <TextView
+                android:id="@+id/ivto"
+                style="@style/ListItemPrimary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginLeft="24dp"
+                android:ellipsize="end"
+                android:gravity="right"
+                android:singleLine="true"
+                android:text="@{CustomBindingAdapters.longToTimeStr(intervention.to)}" />
+
+        </RelativeLayout>
     </RelativeLayout>
 </layout>

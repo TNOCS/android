@@ -11,6 +11,9 @@ import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
+
+import timber.log.Timber;
+
 @JsonTypeInfo(use = JsonTypeInfo.Id.NAME, include = JsonTypeInfo.As.EXTERNAL_PROPERTY, property = "_type")
 @JsonIgnoreProperties(ignoreUnknown = true)
 @JsonInclude(JsonInclude.Include.NON_EMPTY)
@@ -25,6 +28,11 @@ public class MessageIntervention extends MessageBase{
     private String type;
     private Long from;
     private Long to;
+    private String id;
+
+    public String getId() { return id;}
+
+    public void setId(String id) { this.id = id;}
 
     public Long getFrom() {
         return from;
@@ -84,6 +92,11 @@ public class MessageIntervention extends MessageBase{
         iv.setFrom(getFrom());
         iv.setTo(getTo());
         iv.setType(getType());
+        try {
+            iv.setId(Long.parseLong(getId()));
+        } catch (Exception e) {
+            Timber.w("Failed to parse " + getId());
+        }
 
         return iv;
     }
@@ -94,6 +107,7 @@ public class MessageIntervention extends MessageBase{
         message.setType(iv.getType());
         message.setFrom(iv.getFrom());
         message.setTo(iv.getTo());
+        message.setId(iv.getId().toString());
         message.setTst(TimeUnit.MILLISECONDS.toSeconds(new Date().getTime()));
         return message;
     }
