@@ -21,6 +21,8 @@ import org.owntracks.android.R;
 import org.owntracks.android.activities.ActivityIntervention;
 import org.owntracks.android.activities.ActivityRegion;
 import org.owntracks.android.db.Dao;
+import org.owntracks.android.db.Day;
+import org.owntracks.android.db.DayDao;
 import org.owntracks.android.db.Intervention;
 import org.owntracks.android.db.InterventionDao;
 import org.owntracks.android.injection.qualifier.AppContext;
@@ -29,20 +31,45 @@ import org.owntracks.android.support.Events;
 import org.owntracks.android.ui.base.viewmodel.BaseViewModel;
 
 
+import java.sql.Time;
+import java.util.Calendar;
 import java.util.Date;
 
 import javax.inject.Inject;
+
+import timber.log.Timber;
 
 
 @PerActivity
 public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View> implements InterventionsMvvm.ViewModel<InterventionsMvvm.View> {
 
-    private InterventionDao dao;
+    private InterventionDao ivDao;
+    private DayDao dayDao;
     private boolean noInterventionsLogged = true;
+    private Long dayId;
+    private InterventionsAdapter interventionsAdapter;
+
+    public InterventionsAdapter getInterventionsAdapter() {
+        return interventionsAdapter;
+    }
+
+    public void setInterventionsAdapter(InterventionsAdapter interventionsAdapter) {
+        this.interventionsAdapter = interventionsAdapter;
+    }
+
+
+    public Long getDayId() {
+        return dayId;
+    }
+
+    public void setDayId(Long dayId) {
+        this.dayId = dayId;
+    }
 
     @Inject
     public InterventionsViewModel(@AppContext Context context) {
-        this.dao = Dao.getInterventionDao();
+        this.ivDao = Dao.getInterventionDao();
+        this.dayDao = Dao.getDayDao();
     }
 
     public void attachView(@NonNull InterventionsMvvm.View view, @Nullable Bundle savedInstanceState) {
@@ -51,9 +78,30 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
 
     @Override
     public ObservableList<Intervention> getInterventions() {
+        Day day = this.dayDao.loadByRowId(getDayId());
+        Calendar dayCal = getDayCalendar(day);
+
         ObservableList<Intervention> ivList = new ObservableArrayList<Intervention>();
-        ivList.addAll(this.dao.loadAll());
+        for (Intervention iv: this.ivDao.loadAll()) {
+            Calendar ivCal = getInterventionCalendar(iv);
+            if (ivCal.get(Calendar.DAY_OF_YEAR) == dayCal.get(Calendar.DAY_OF_YEAR)
+                    && ivCal.get(Calendar.YEAR) == dayCal.get(Calendar.YEAR)) {
+                ivList.add(iv);
+            }
+        }
         return ivList;
+    }
+
+    private Calendar getDayCalendar(Day day) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTime(day.getDate());
+        return cal;
+    }
+
+    private Calendar getInterventionCalendar(Intervention iv) {
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(iv.getFrom());
+        return cal;
     }
 
     public void checkInterventions() {
@@ -61,10 +109,20 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
         notifyPropertyChanged(BR.noInterventionsLogged);
     }
 
+    public void updateAdapter() {
+        interventionsAdapter.setItems(getInterventions());
+        checkInterventions();
+    }
+
     public void deleteIntervention(Long id) {
         InterventionDao dao = Dao.getInterventionDao();
         Intervention iv = dao.loadByRowId(id);
-        dao.deleteByKey(id);
+        if (iv == null) {
+            Timber.v("Cannot delete intervention null");
+            return;
+        }
+        dao.delete(iv);
+        updateAdapter();
         App.getEventBus().post(new Events.InterventionRemoved(iv)); // For ServiceLocator update
     }
 

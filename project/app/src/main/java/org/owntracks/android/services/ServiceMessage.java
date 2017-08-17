@@ -202,7 +202,7 @@ public class ServiceMessage implements ProxyableService, IncomingMessageProcesso
             if(m instanceof MessageLocation) {
                 App.getEventBus().post(m);
             }
-            Toasts.showMessageSentAndRemaining(outgoingQueue.size());
+            //Toasts.showMessageSentAndRemaining(outgoingQueue.size());
         }
     }
 

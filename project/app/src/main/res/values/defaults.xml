@@ -29,6 +29,7 @@
     <integer name="valIgnoreInaccurateLocations">0</integer>
     <integer name="valModeId">3</integer>
     <integer name="valMqttProtocolLevel">3</integer>
+    <integer name="valNotificationReminderInterval">30</integer>
 
     <bool name="valPub">true</bool>
     <bool name="valCleanSession">false</bool>
@@ -57,6 +58,7 @@
     <bool name="valRemoteConfigurationPublic">false</bool>
     <bool name="valPubRetainPublic">false</bool>
     <bool name="valWsPublic">false</bool>
+    <bool name="valNotificationReminder">true</bool>
 
     <string-array name="modeIds" translatable="false">
         <item>3</item>

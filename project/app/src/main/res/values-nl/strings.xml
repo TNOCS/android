@@ -39,4 +39,13 @@
     <string name="messageQueued">Bericht wacht op verzending</string>
     <string name="mode_description">PoliceTracks kan op meerdere manieren verbinden. Kies de HTTP-privaat modus voor het experiment.</string>
     <string name="mode_heading"></string>
+    <string name="title_activity_diary">Dagboek</string>
+    <string name="title_activity_interventions">Interventies</string>
+    <string name="title_activity_map">Kaart</string>
+    <string name="title_activity_region">Regio</string>
+    <string name="title_activity_regions">Regios</string>
+    <string name="title_activity_status">Status</string>
+    <string name="title_activity_preferences">Instellingen</string>
+    <string name="interventionReminderDesc">Vergeet niet om je interventies in te vullen</string>
+    <string name="menuClear">Leegmaken</string>
 </resources>

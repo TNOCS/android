@@ -242,6 +242,11 @@ public class ActivityPreferences extends ActivityBase {
             screen.addPreference(background);
             addSwitchPreference(background, Preferences.Keys.NOTIFICATION_EVENTS, R.string.preferencesNotificationEvents, R.string.preferencesNotificationEventsSummary, R.bool.valNotificationEvents);
 
+            PreferenceCategory intervention = getCategory(R.string.preferencesCategoryNotificationIntervention);
+            screen.addPreference(intervention);
+            addSwitchPreference(intervention, Preferences.Keys.NOTIFICATION_REMINDER, R.string.preferencesNotificationInterventions, R.string.preferencesNotificationInterventionsSummary, R.bool.valNotificationReminder);
+            addEditIntegerPreference(intervention, Preferences.Keys.NOTIFICATION_REMINDER_INTERVAL, R.string.preferencesNotificationInterventionsInterval, R.integer.valNotificationReminderInterval).withPreferencesSummary(R.string.preferencesNotificationInterventionsIntervalSummary);
+
         }
 
         private void setupDependencies(PreferenceScreen root) {

@@ -33,6 +33,7 @@ import org.owntracks.android.support.GeocodingProvider;
 import org.owntracks.android.support.Preferences;
 import org.owntracks.android.support.widgets.Toasts;
 import org.owntracks.android.support.interfaces.ProxyableService;
+import org.owntracks.android.ui.diary.DiaryActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -68,6 +69,10 @@ public class ServiceNotification implements ProxyableService {
     // Permission notification
     private NotificationCompat.Builder notificationBuilderPermission;
     private static final int NOTIFICATION_ID_PERMISSION = 4;
+
+    // Intervention fill in notification
+    private NotificationCompat.Builder notificationBuilderInterventionReminder;
+    private static final int NOTIFICATION_ID_INTERVENTION_REMINDER = 5;
 
 
 
@@ -215,7 +220,13 @@ public class ServiceNotification implements ProxyableService {
         String subtitle = notificationOngoingLastStateCache.getLabel(context);
 
         if (isLastPublishedLocationWithGeocoderAvailable() && Preferences.getNotificationLocation()) {
-            notificationBuilderOngoing.setContentTitle(this.notificationOngoingLastLocationCache.getGeocoder());
+            String msg = "Tracking ";
+            if (Preferences.getPub())
+                msg += "ACTIVE";
+            else
+                msg += "NOT active";
+            msg += ". " + this.notificationOngoingLastLocationCache.getGeocoder();
+            notificationBuilderOngoing.setContentTitle(msg);
             notificationBuilderOngoing.setWhen(TimeUnit.SECONDS.toMillis(this.notificationOngoingLastLocationCache.getTst()));
 
         } else {
@@ -420,6 +431,36 @@ public class ServiceNotification implements ProxyableService {
         notificationBuilderPermission.setContentTitle(this.context.getString(R.string.app_name));
 
         notificationManager.notify(NOTIFICATION_ID_PERMISSION, notificationBuilderPermission.build());
+    }
+
+    public void notifyInterventionReminder() {
+        if (!Preferences.getNotificationReminder())
+            return;
+
+        notificationBuilderInterventionReminder = new NotificationCompat.Builder(context);
+
+        final Intent resultIntent = new Intent(this.context, DiaryActivity.class);
+        resultIntent.setAction("android.intent.action.MAIN");
+        resultIntent.addCategory("android.intent.category.LAUNCHER");
+        resultIntent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        notificationBuilderInterventionReminder.setContentIntent(PendingIntent.getActivity(this.context, 0, resultIntent, PendingIntent.FLAG_UPDATE_CURRENT));
+
+        notificationBuilderInterventionReminder.setSmallIcon(R.drawable.ic_notification);
+        notificationBuilderInterventionReminder.setGroup(NOTIFICATION_ID_INTERVENTION_REMINDER + "");
+        notificationBuilderInterventionReminder.setAutoCancel(false);
+        notificationBuilderInterventionReminder.setShowWhen(false);
+
+        if (android.os.Build.VERSION.SDK_INT >= 21) {
+            notificationBuilderInterventionReminder.setColor(ContextCompat.getColor(context, R.color.primary));
+            notificationBuilderInterventionReminder.setPriority(NotificationCompat.PRIORITY_DEFAULT);
+            notificationBuilderInterventionReminder.setCategory(NotificationCompat.CATEGORY_ERROR);
+            notificationBuilderInterventionReminder.setVisibility(NotificationCompat.VISIBILITY_PUBLIC);
+        }
+
+        notificationBuilderInterventionReminder.setContentText(this.context.getResources().getString(R.string.interventionReminderDesc));
+        notificationBuilderInterventionReminder.setContentTitle(this.context.getString(R.string.app_name));
+
+        notificationManager.notify(NOTIFICATION_ID_INTERVENTION_REMINDER, notificationBuilderInterventionReminder.build());
     }
 }
 

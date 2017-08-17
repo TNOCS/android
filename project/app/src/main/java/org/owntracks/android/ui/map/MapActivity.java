@@ -161,6 +161,7 @@ public class MapActivity extends BaseActivity<UiActivityMapBinding, MapMvvm.View
         flagStateMapReady = true;
         flagRefreshContactAll = true;
         executePendingActions();
+        enableLocationMenus();
     }
 
 

@@ -143,14 +143,14 @@ public class ActivityNavigator extends BaseNavigator {
                 .withStickyFooterDivider(true)
                 .addDrawerItems(
                         drawerItemForClass(activity, DiaryActivity.class, R.string.title_activity_diary, R.drawable.ic_date_range_black_24dp),
-                        drawerItemForClass(activity, MapActivity.class, R.string.title_activity_map, R.drawable.ic_layers_black_24dp),
-                        drawerItemForClass(activity, ContactsActivity.class, R.string.title_activity_contacts, R.drawable.ic_supervisor_account_black_24dp),
-                        drawerItemForClass(activity, ActivityRegions.class, R.string.title_activity_regions, R.drawable.ic_adjust_black_24dp)
+                        drawerItemForClass(activity, MapActivity.class, R.string.title_activity_map, R.drawable.ic_layers_black_24dp)
+//                        drawerItemForClass(activity, ContactsActivity.class, R.string.title_activity_contacts, R.drawable.ic_supervisor_account_black_24dp),
+//                        drawerItemForClass(activity, ActivityRegions.class, R.string.title_activity_regions, R.drawable.ic_adjust_black_24dp)
 
 
                 ).addStickyDrawerItems(
                         switchDrawerItemPub(),
-                        switchDrawerItemCopy(),
+//                        switchDrawerItemCopy(),
                         secondaryDrawerItemForClass(activity, StatusActivity.class, R.string.title_activity_status, R.drawable.ic_info_black_24dp),
                         secondaryDrawerItemForClass(activity, ActivityPreferences.class, R.string.title_activity_preferences, R.drawable.ic_settings_black_36dp)
                 ).withOnDrawerItemClickListener(new Drawer.OnDrawerItemClickListener() {

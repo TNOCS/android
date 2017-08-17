@@ -23,6 +23,11 @@
     <string name="preferencesNotificationSummary">"Display a notification to keep running"</string>
     <string name="preferencesNotificationLocationSummary">"Display last reported location and time"</string>
     <string name="preferencesNotificationLocation">"Last reported location"</string>
+    <string name="preferencesCategoryNotificationIntervention">"Intervention notifications"</string>
+    <string name="preferencesNotificationInterventions">"Intervention reminders"</string>
+    <string name="preferencesNotificationInterventionsSummary">"Notify to fill in interventions"</string>
+    <string name="preferencesNotificationInterventionsInterval">"Reminder interval"</string>
+    <string name="preferencesNotificationInterventionsIntervalSummary">"Minutes between reminders"</string>
 
     <string name="preferencesAdvanced">"Advanced"</string>
     <string name="preferencesVersion">"Version"</string>
@@ -262,7 +267,7 @@
     <string name="preferencesLoadFailed">Unable to load effective configuration</string>
     <string name="preferencesEditorKey">Key</string>
     <string name="preferencesEditorValue">Value</string>
-    <string name="drawerSwitchReporting">Reporting</string>
+    <string name="drawerSwitchReporting">Tracking</string>
     <string name="drawerSwitchCopy">Copy</string>
     <string name="startTime">Start time</string>
     <string name="endTime">End time</string>
@@ -273,5 +278,6 @@
     <string name="othertype">Custom intervention</string>
     <string name="delete_intervention">Delete intervention</string>
     <string name="delete_intervention_quest">Are you sure you want to delete this intervention?</string>
+    <string name="interventionReminderDesc">Don\'t forget to fill in your interventions</string>
 
 </resources>

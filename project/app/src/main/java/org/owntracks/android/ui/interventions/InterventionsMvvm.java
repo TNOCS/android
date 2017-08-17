@@ -26,7 +26,11 @@ public interface InterventionsMvvm {
 
     interface ViewModel<V extends MvvmView> extends MvvmViewModel<V> {
         ObservableList<Intervention> getInterventions();
+        InterventionsAdapter getInterventionsAdapter();
+        void setInterventionsAdapter(InterventionsAdapter interventionsAdapter);
         void checkInterventions();
+        void updateAdapter();
+        void setDayId(Long dayId);
         void onInterventionClick(Intervention iv, android.view.View view, boolean longClick);
     }
 }

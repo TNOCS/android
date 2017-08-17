@@ -743,6 +743,16 @@ public class Preferences {
     public static void setNotificationEvents(boolean notificationEvents) {
         setBoolean(Keys.NOTIFICATION_EVENTS, notificationEvents);
     }
+    @Import(key =Keys.NOTIFICATION_REMINDER)
+    public static void setNotificationReminder(boolean notificationReminder) {
+        setBoolean(Keys.NOTIFICATION_REMINDER, notificationReminder);
+    }
+    @Import(key =Keys.NOTIFICATION_REMINDER_INTERVAL)
+    public static void setNotificationReminderInterval(int notificationReminderInterval) {
+        if (notificationReminderInterval > 120) notificationReminderInterval = 120;
+        if (notificationReminderInterval <= 0) notificationReminderInterval = 1;
+        setInt(Keys.NOTIFICATION_REMINDER_INTERVAL, notificationReminderInterval);
+    }
 
     @Import(key =Keys.SUB_TOPIC)
     private static void setSubTopic(String string) {
@@ -875,8 +885,6 @@ public class Preferences {
         return getBoolean(Keys.NOTIFICATION_HIGHER_PRIORITY, R.bool.valNotificationHigherPriority);
     }
 
-
-
     @Export(key =Keys.NOTIFICATION_LOCATION, exportModeMqttPrivate =true, exportModeMqttPublic = true)
     public static boolean getNotificationLocation() {
         return getBoolean(Keys.NOTIFICATION_LOCATION, R.bool.valNotificationLocation);
@@ -884,6 +892,16 @@ public class Preferences {
 
     public static boolean getNotificationEvents() {
         return getBoolean(Keys.NOTIFICATION_EVENTS, R.bool.valNotificationEvents);
+    }
+
+    @Export(key =Keys.NOTIFICATION_REMINDER, exportModeMqttPrivate =true, exportModeMqttPublic = true, exportModeHttpPrivate = true)
+    public static boolean getNotificationReminder() {
+        return getBoolean(Keys.NOTIFICATION_REMINDER, R.bool.valNotificationReminder);
+    }
+
+    @Export(key =Keys.NOTIFICATION_REMINDER_INTERVAL, exportModeMqttPrivate =true, exportModeMqttPublic = true, exportModeHttpPrivate = true)
+    public static int getNotificationReminderInterval() {
+        return getInt(Keys.NOTIFICATION_REMINDER_INTERVAL, R.integer.valNotificationReminderInterval);
     }
 
     @Export(key =Keys.PUB_QOS, exportModeMqttPrivate =true)
@@ -1128,6 +1146,8 @@ public class Preferences {
         public static final String NOTIFICATION_EVENTS              = "notificationEvents";
         public static final String NOTIFICATION_HIGHER_PRIORITY     = "notificationHigherPriority";
         public static final String NOTIFICATION_LOCATION            = "notificationLocation";
+        public static final String NOTIFICATION_REMINDER            = "notificationReminder";
+        public static final String NOTIFICATION_REMINDER_INTERVAL   = "notificationReminderInterval";
         public static final String PASSWORD                         = "password";
         public static final String PLAY_OVERRIDE                    = "playOverride";
         public static final String PORT                             = "port";

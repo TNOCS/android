@@ -34,6 +34,7 @@ import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.os.Looper;
 import android.os.PowerManager;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.ContextCompat;
@@ -70,6 +71,7 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
     private long lastPublish;
     private WaypointDao waypointDao;
     private static boolean hasLocationPermission = false;
+    private long lastInterventionEntered;
 
 
 
@@ -79,6 +81,7 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
         checkLocationPermission();
 
         this.lastPublish = System.currentTimeMillis(); // defer first location report when the service is started;
+        this.lastInterventionEntered = System.currentTimeMillis(); // defer first reminder when the service is started;
         this.waypointDao = Dao.getWaypointDao();
         this.googleApiClient = new GoogleApiClient.Builder(this.context).addApi(LocationServices.API).addConnectionCallbacks(this).addOnConnectionFailedListener(this).build();
 
@@ -214,6 +217,17 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
         return (System.currentTimeMillis() - this.lastPublish) > TimeUnit.SECONDS.toMillis(30);
     }
 
+    private boolean shouldRemindIntervention() {
+        if(!Preferences.getPub())
+            return false;
+
+        if (ServiceProxy.isInForeground())
+            return false;
+
+        // Reminders are throttled to X minutes when in the background to not spam the user
+        int intervalMinutes = Preferences.getNotificationReminderInterval();
+        return (System.currentTimeMillis() - this.lastInterventionEntered) > TimeUnit.MINUTES.toMillis(intervalMinutes);
+    }
 
 
 	private void setupBackgroundLocationRequest() {
@@ -261,7 +275,7 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
         }
         this.mLocationRequest.setInterval(TimeUnit.SECONDS.toMillis(10));
 		this.mLocationRequest.setFastestInterval(TimeUnit.SECONDS.toMillis(10));
-        this.mLocationRequest.setSmallestDisplacement(50);
+        this.mLocationRequest.setSmallestDisplacement(20);
 
 	}
 
@@ -442,6 +456,9 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
 	private void reportLocation(String trigger) {
         Timber.v("trigger:%s", trigger);
 
+        if (shouldRemindIntervention())
+            handleInterventionReminder(null);
+
         Location l = getLastKnownLocation();
 		if (l == null) {
             Timber.e("reportLocation called without a known location");
@@ -541,10 +558,13 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
         if(update && remove)
             throw new IllegalArgumentException("update and remove cannot be true at the same time");
 
+        lastInterventionEntered = System.currentTimeMillis();
         MessageIntervention message = MessageIntervention.fromDaoObject(iv);
         message._custom_endpoint = true; // Send it to the json webservice
         if (remove) {
             message._custom_CRUD = "D"; // Delete it
+        } else if (update) {
+            message._custom_CRUD = "U"; // Update it
         }
         ServiceProxy.getServiceMessage().sendMessage(message);
     }
@@ -627,7 +647,14 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
         }
 	}
 
-    private void handleSecurityException(@Nullable  SecurityException e) {
+    private void handleInterventionReminder(@Nullable SecurityException e) {
+        if(e != null)
+            Timber.e(e.getMessage());
+        ServiceProxy.getServiceNotification().notifyInterventionReminder();
+        this.lastInterventionEntered = System.currentTimeMillis();
+    }
+
+    private void handleSecurityException(@Nullable SecurityException e) {
         if(e != null)
             Timber.e(e.getMessage());
         hasLocationPermission = false;

@@ -10,11 +10,16 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
+import org.greenrobot.eventbus.Subscribe;
+import org.greenrobot.eventbus.ThreadMode;
+import org.owntracks.android.App;
 import org.owntracks.android.R;
 import org.owntracks.android.activities.ActivityIntervention;
 import org.owntracks.android.activities.ActivityWelcome;
 import org.owntracks.android.databinding.UiActivityInterventionsBinding;
+import org.owntracks.android.db.Day;
 import org.owntracks.android.db.Intervention;
+import org.owntracks.android.support.Events;
 import org.owntracks.android.ui.base.BaseActivity;
 
 import timber.log.Timber;
@@ -24,7 +29,6 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
     public static final String BUNDLE_KEY_INTERVENTIONS_ID = "BUNDLE_KEY_INTERVENTIONS_ID";
 
     private Menu mMenu;
-    private InterventionsAdapter interventionAdapter;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -39,15 +43,45 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
         setSupportToolbar(binding.toolbar);
         setDrawer(binding.toolbar);
 
-        interventionAdapter = new InterventionsAdapter(viewModel.getInterventions(), this);
+        handleIntentExtras(getIntent());
+        viewModel.setInterventionsAdapter(new InterventionsAdapter(viewModel.getInterventions(), this));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(interventionAdapter);
+        binding.recyclerView.setAdapter(viewModel.getInterventionsAdapter());
+
+    }
+
+    private void handleIntentExtras(Intent intent) {
+        Bundle b = getExtrasBundle(intent);
+        if(b != null) {
+            Timber.v("intent has extras from navigator");
+            Long dayId = b.getLong(BUNDLE_KEY_INTERVENTIONS_ID);
+            if(dayId != null) {
+                viewModel.setDayId(dayId);
+            }
+        }
+    }
+
+    @Override
+    public void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        handleIntentExtras(intent);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
     }
 
     @Override
     public void onResume() {
-        updateAdapter();
         super.onResume();
+        updateAdapter();
+        handleIntentExtras(getIntent());
     }
 
     @Override
@@ -75,8 +109,7 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
     }
 
     private void updateAdapter() {
-        viewModel.checkInterventions();
-        interventionAdapter.setItems(viewModel.getInterventions());
-        binding.recyclerView.postInvalidate();
+        viewModel.updateAdapter();
+//        binding.recyclerView.postInvalidate();
     }
 }
