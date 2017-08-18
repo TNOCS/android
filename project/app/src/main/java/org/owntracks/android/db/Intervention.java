@@ -18,15 +18,18 @@ public class Intervention {
 
     @NotNull
     private String type;
+    private String subtype;
     private String comment;
     private Long from;
     private Long to;
     private String created;
 
-    @Generated(hash = 1597981105)
-    public Intervention(Long id, @NotNull String type, String comment, Long from, Long to, String created) {
+    @Generated(hash = 2043240241)
+    public Intervention(Long id, @NotNull String type, String subtype, String comment, Long from, Long to,
+            String created) {
         this.id = id;
         this.type = type;
+        this.subtype = subtype;
         this.comment = comment;
         this.from = from;
         this.to = to;
@@ -55,6 +58,14 @@ public class Intervention {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
 
     @NotNull

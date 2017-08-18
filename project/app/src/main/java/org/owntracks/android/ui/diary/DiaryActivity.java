@@ -9,12 +9,15 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 
 import org.owntracks.android.App;
 import org.owntracks.android.R;
 import org.owntracks.android.activities.ActivityWelcome;
 import org.owntracks.android.databinding.UiActivityDiaryBinding;
 import org.owntracks.android.db.Day;
+import org.owntracks.android.support.Preferences;
 import org.owntracks.android.ui.base.BaseActivity;
 
 import timber.log.Timber;
@@ -23,6 +26,7 @@ import timber.log.Timber;
 public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvvm.ViewModel> implements DiaryMvvm.View, org.owntracks.android.ui.diary.DiaryAdapter.ClickListener {
     private Menu mMenu;
     private DiaryAdapter diaryAdapter;
+    private Switch mTrackingSwitch;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -41,6 +45,21 @@ public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvv
 
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
         binding.recyclerView.setAdapter(diaryAdapter);
+
+        mTrackingSwitch = (Switch)findViewById(R.id.trackingswitch);
+        mTrackingSwitch.setChecked(Preferences.getPub());
+        mTrackingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                Preferences.setPub(isChecked);
+            }
+        });
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mTrackingSwitch.setChecked(Preferences.getPub());
     }
 
     @Override

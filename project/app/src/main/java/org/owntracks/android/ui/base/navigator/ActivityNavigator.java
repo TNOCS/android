@@ -149,7 +149,7 @@ public class ActivityNavigator extends BaseNavigator {
 
 
                 ).addStickyDrawerItems(
-                        switchDrawerItemPub(),
+//                        switchDrawerItemPub(),
 //                        switchDrawerItemCopy(),
                         secondaryDrawerItemForClass(activity, StatusActivity.class, R.string.title_activity_status, R.drawable.ic_info_black_24dp),
                         secondaryDrawerItemForClass(activity, ActivityPreferences.class, R.string.title_activity_preferences, R.drawable.ic_settings_black_36dp)

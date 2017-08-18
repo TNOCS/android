@@ -343,7 +343,7 @@ e.printStackTrace();                } catch (Parser.EncryptionException e) {
         if (message._custom_CRUD != null && message._custom_CRUD == "D") {
             postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "DELETE");
         } else if (message._custom_CRUD != null && message._custom_CRUD == "U") {
-            postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "UPDATE");
+            postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "PUT");
         } else {
             postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "POST");
         }

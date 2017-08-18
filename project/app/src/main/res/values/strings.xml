@@ -118,33 +118,31 @@
     </string-array>
 
     <string-array name="intervention_types">
-        <item>PGA-P - TopXlijst (aanlopen door wijkagent)</item>
-        <item>PGA-P - Veelplegers (aanlopen door wijkagent)</item>
-        <item>Dadergerichte (hotshots) surveillance in uniform</item>
-        <item>Dadergerichte (hotshots) surveillance in burger	</item>
-        <item>Service aan Melder</item>
-        <item>Gebiedsgerichte (hotspots) surveillance in burger</item>
-        <item>Gebiedsgerichte (hotspots) surveillance in uniform</item>
-        <item>Buiten/binnenring controle zonder ANPR</item>
-        <item>Buiten/binnenring controle met ANPR</item>
-        <item>Buiten/binnenring controle met partners</item>
-        <item>Preventief fouilleren</item>
-        <item>Wijk-op-slot met partners</item>
-        <item>Wijk-op-slot met ANPR</item>
-        <item>Wijk-op-slot zonder ANPR</item>
+        <item>PGA-P0 - Veelplegers (aanlopen door wijkagent)</item>
+        <item>Dadergerichte surveillance</item>
+        <item>Gebiedsgerichte surveillance</item>
+        <item>Buiten/binnenring controle</item>
+        <item>Wijk-op-slot</item>
         <item>Preventief bezoek overvalgevoelige locaties</item>
-        <item>Buitenringcontrole met partners</item>
-        <item>Buitenringcontrole zonder ANPR</item>
-        <item>Buitenringcontrole met ANPR</item>
-        <item>Binnenring controle (Fosfor)</item>
-        <item>Afzonderlijke inzet ANPR</item>
-        <item>Drie ringenmodel</item>
-        <item>(Extra) stadstoezicht</item>
+        <item>Buitenringcontrole</item>
+        <item>Fosfor</item>
         <item>Buurtonderzoek op locatie</item>
-        <item>Rijden op een melding (extra voor noodoproepteams)</item>
+        <item>Spoed-melding</item>
+        <item>NU-melding</item>
+        <item>Later-melding</item>
         <item>Anders, namelijk:</item>
     </string-array>
 
+    <string-array name="intervention_subtypes_visible">
+        <item>in uniform</item>
+        <item>in burger</item>
+    </string-array>
+
+    <string-array name="intervention_subtypes_number">
+        <item>zonder ANPR</item>
+        <item>met ANPR</item>
+        <item>met partners</item>
+    </string-array>
 
     <string name="mode_mqtt_private_label">Private MQTT</string>
     <string name="mode_mqtt_public_label">Public MQTT</string>
@@ -279,5 +277,6 @@
     <string name="delete_intervention">Delete intervention</string>
     <string name="delete_intervention_quest">Are you sure you want to delete this intervention?</string>
     <string name="interventionReminderDesc">Don\'t forget to fill in your interventions</string>
+    <string name="trackingActive">Activate tracking </string>
 
 </resources>

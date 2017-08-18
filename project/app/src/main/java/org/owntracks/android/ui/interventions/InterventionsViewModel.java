@@ -28,11 +28,13 @@ import org.owntracks.android.db.InterventionDao;
 import org.owntracks.android.injection.qualifier.AppContext;
 import org.owntracks.android.injection.scopes.PerActivity;
 import org.owntracks.android.support.Events;
+import org.owntracks.android.support.InterventionSort;
 import org.owntracks.android.ui.base.viewmodel.BaseViewModel;
 
 
 import java.sql.Time;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 
 import javax.inject.Inject;
@@ -48,6 +50,7 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
     private boolean noInterventionsLogged = true;
     private Long dayId;
     private InterventionsAdapter interventionsAdapter;
+    private InterventionSort interventionSort = new InterventionSort();
 
     public InterventionsAdapter getInterventionsAdapter() {
         return interventionsAdapter;
@@ -89,6 +92,7 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
                 ivList.add(iv);
             }
         }
+        Collections.sort(ivList, interventionSort);
         return ivList;
     }
 
@@ -105,6 +109,8 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
     }
 
     public void checkInterventions() {
+        if (this.noInterventionsLogged == (getInterventions().size() == 0))
+            return;
         this.noInterventionsLogged = (getInterventions().size() == 0);
         notifyPropertyChanged(BR.noInterventionsLogged);
     }

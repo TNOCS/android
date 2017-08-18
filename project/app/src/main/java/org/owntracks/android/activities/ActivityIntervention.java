@@ -11,6 +11,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.SpinnerAdapter;
 import android.widget.TimePicker;
 
 import org.owntracks.android.App;
@@ -24,6 +25,8 @@ import org.owntracks.android.support.Events;
 import org.owntracks.android.support.SimpleTextChangeListener;
 import org.owntracks.android.support.widgets.HourMinute;
 import org.owntracks.android.support.widgets.Toasts;
+
+import java.lang.reflect.Array;
 
 import timber.log.Timber;
 
@@ -39,6 +42,8 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
     private MenuItem saveButton;
     private ActivityInterventionBinding binding;
     private String[] interventionTypes = new String[]{"No interventions defined"};
+    private String[] interventionSubtypes = new String[]{};
+    private ArrayAdapter<String> subTypesAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -69,6 +74,7 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         }
 
         this.initializeSpinner();
+        this.initializeSubSpinner(this.interventionSubtypes, true);
 
         binding.startTime.setOnClickListener(this);
         binding.endTime.setOnClickListener(this);
@@ -87,7 +93,18 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         if (this.iv.getType() == null) return;
         int pos = spinnerArrayAdapter.getPosition(this.iv.getType());
         binding.spinnerIvtype.setSelection(pos);
+    }
 
+    private void initializeSubSpinner(String[] interventionSubtypes, boolean firstCall) {
+        this.subTypesAdapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, interventionSubtypes); //selected item will look like a spinner set from XML
+        this.subTypesAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        binding.spinnerIvSubtype.setAdapter(this.subTypesAdapter);
+        if (firstCall) {
+            binding.spinnerIvSubtype.setOnItemSelectedListener(this);
+            if (this.iv.getSubtype() == null) return;
+            int pos = this.subTypesAdapter.getPosition(this.iv.getSubtype());
+            binding.spinnerIvSubtype.setSelection(pos);
+        }
     }
 
     private void setupListenerAndRequiredFields() {
@@ -249,17 +266,51 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
 
     }
 
+    private void updateSubtypeSpinner() {
+        switch(this.iv.getType()) {
+            case "Dadergerichte surveillance":
+            case "Gebiedsgerichte surveillance":
+                this.interventionSubtypes = getResources().getStringArray(R.array.intervention_subtypes_visible);
+                break;
+            case "Buiten/binnenring controle":
+            case "Buitenringcontrole":
+            case "Wijk-op-slot":
+                this.interventionSubtypes = getResources().getStringArray(R.array.intervention_subtypes_number);
+                break;
+            default:
+                this.interventionSubtypes = new String[]{};
+                break;
+        }
+        this.initializeSubSpinner(this.interventionSubtypes, false);
+        if (this.interventionSubtypes == null || this.interventionSubtypes.length == 0) {
+            binding.spinnerIvSubtype.setVisibility(View.INVISIBLE);
+        } else {
+            binding.spinnerIvSubtype.setVisibility(View.VISIBLE);
+        }
+    }
+
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
         Object item = adapterView.getItemAtPosition(i);
         if (item == null) return;
-        this.iv.setType((String) item);
+        if (adapterView.getId() == binding.spinnerIvtype.getId()) {
+            this.iv.setType((String) item);
+            this.iv.setSubtype(null);
+            updateSubtypeSpinner();
+        } else if (adapterView.getId() == binding.spinnerIvSubtype.getId()) {
+            this.iv.setSubtype((String) item);
+        }
         conditionallyEnableSaveButton();
     }
 
     @Override
     public void onNothingSelected(AdapterView<?> adapterView) {
-        this.iv.setType(null);
+        if (adapterView.getId() == binding.spinnerIvtype.getId()) {
+            this.iv.setType(null);
+            this.iv.setSubtype(null);
+        } else if (adapterView.getId() == binding.spinnerIvSubtype.getId()) {
+            this.iv.setSubtype(null);
+        }
         conditionallyEnableSaveButton();
     }
 }

@@ -26,6 +26,7 @@ public class MessageIntervention extends MessageBase{
     private String comment;
     private long tst;
     private String type;
+    private String subtype;
     private Long from;
     private Long to;
     private String id;
@@ -56,6 +57,14 @@ public class MessageIntervention extends MessageBase{
 
     public void setType(String type) {
         this.type = type;
+    }
+
+    public String getSubtype() {
+        return subtype;
+    }
+
+    public void setSubtype(String subtype) {
+        this.subtype = subtype;
     }
 
     public String getComment() {
@@ -92,6 +101,7 @@ public class MessageIntervention extends MessageBase{
         iv.setFrom(getFrom());
         iv.setTo(getTo());
         iv.setType(getType());
+        iv.setSubtype(getSubtype());
         try {
             iv.setId(Long.parseLong(getId()));
         } catch (Exception e) {
@@ -105,6 +115,7 @@ public class MessageIntervention extends MessageBase{
         MessageIntervention message = new MessageIntervention();
         message.setComment(iv.getComment());
         message.setType(iv.getType());
+        message.setSubtype(iv.getSubtype());
         message.setFrom(iv.getFrom());
         message.setTo(iv.getTo());
         message.setId(iv.getId().toString());

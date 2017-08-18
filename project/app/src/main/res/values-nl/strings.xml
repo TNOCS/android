@@ -48,4 +48,5 @@
     <string name="title_activity_preferences">Instellingen</string>
     <string name="interventionReminderDesc">Vergeet niet om je interventies in te vullen</string>
     <string name="menuClear">Leegmaken</string>
+    <string name="trackingActive">Activeer tracking </string>
 </resources>

@@ -57,6 +57,15 @@
                     android:layout_marginStart="@dimen/default_spacing_half"
                     android:layout_marginTop="20dp"/>
 
+                <Spinner
+                    android:id="@+id/spinnerIvSubtype"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/default_spacing_half"
+                    android:layout_marginStart="@dimen/default_spacing_half"
+                    android:layout_marginTop="20dp"
+                    android:visibility="gone"/>
+
                 <com.rengwuxian.materialedittext.MaterialEditText
                     android:id="@+id/comment"
                     android:layout_width="match_parent"
