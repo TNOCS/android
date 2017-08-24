@@ -1,6 +1,7 @@
 package org.owntracks.android.ui.diary;
 
 import android.databinding.ObservableList;
+import android.widget.CompoundButton;
 
 import org.owntracks.android.db.Day;
 import org.owntracks.android.ui.base.view.MvvmView;
@@ -24,11 +25,16 @@ public interface DiaryMvvm {
     interface View extends MvvmView {
     }
 
-    interface ViewModel<V extends MvvmView> extends MvvmViewModel<V> {
+    interface ViewModel<V extends MvvmView> extends MvvmViewModel<V>, CompoundButton.OnCheckedChangeListener {
         ObservableList<Day> getDays();
         boolean isTodayAlreadyAdded();
         void checkDays();
+        void setDiaryAdapter(DiaryAdapter diaryAdapter);
+        DiaryAdapter getDiaryAdapter();
+        void updateAdapter();
         void addToday();
         void onDayClick(Day day);
+        void onCheckedChanged(CompoundButton btn, boolean isChecked);
+        void syncWithServer();
     }
 }

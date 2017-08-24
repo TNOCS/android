@@ -1,6 +1,8 @@
 package org.owntracks.android.activities;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
@@ -21,12 +23,16 @@ import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Intervention;
 import org.owntracks.android.db.InterventionDao;
 import org.owntracks.android.services.ServiceProxy;
+import org.owntracks.android.support.CustomBindingAdapters;
 import org.owntracks.android.support.Events;
 import org.owntracks.android.support.SimpleTextChangeListener;
 import org.owntracks.android.support.widgets.HourMinute;
 import org.owntracks.android.support.widgets.Toasts;
 
 import java.lang.reflect.Array;
+import java.sql.Time;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 import timber.log.Timber;
 
@@ -44,6 +50,8 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
     private String[] interventionTypes = new String[]{"No interventions defined"};
     private String[] interventionSubtypes = new String[]{};
     private ArrayAdapter<String> subTypesAdapter;
+    private long dayStart = -1;
+    private long dayEnd = -1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,7 +72,13 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         this.dao = Dao.getInterventionDao();
 
         if (hasIntentExtras()) {
-            this.iv = this.dao.loadByRowId(getIntent().getExtras().getLong("keyId"));
+            this.iv = this.dao.loadByRowId(getIntent().getExtras().getLong("ivId"));
+            if (getIntent().getExtras().getLong("dayStartId", -1) != -1) {
+                this.dayStart = getIntent().getExtras().getLong("dayStartId");
+            }
+            if (getIntent().getExtras().getLong("dayEndId", -1) != -1) {
+                this.dayEnd = getIntent().getExtras().getLong("dayEndId");
+            }
         }
 
         if(this.iv == null) {
@@ -118,6 +132,30 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         binding.comment.addTextChangedListener(requiredForSave);
     }
 
+    private void moveInterventionOneDayForward() {
+        moveInterventionOneDay(true);
+    }
+
+    private void moveInterventionOneDayBack() {
+        moveInterventionOneDay(false);
+    }
+
+
+    private void moveInterventionOneDay(boolean forward) {
+        if (forward) {
+            iv.setFrom(iv.getFrom() + TimeUnit.DAYS.toMillis(1));
+            iv.setTo(iv.getTo() + TimeUnit.DAYS.toMillis(1));
+        } else {
+            iv.setFrom(iv.getFrom() - TimeUnit.DAYS.toMillis(1));
+            iv.setTo(iv.getTo() - TimeUnit.DAYS.toMillis(1));
+        }
+        if (iv.getTo() <= iv.getFrom()) {
+            iv.setTo(iv.getFrom() + TimeUnit.HOURS.toMillis(1));
+        }
+        binding.setItem(iv);
+        conditionallyEnableSaveButton();
+    }
+
     private void conditionallyEnableSaveButton() {
         boolean enabled = true;
         try {
@@ -125,6 +163,9 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
             if (iv.getFrom() == null) enabled = false;
             if (iv.getTo() == null) enabled = false;
             if (iv.getFrom() >= iv.getTo()) enabled = false;
+            if (iv.getFrom() < dayStart) enabled = false;
+            if (dayEnd != -1 && iv.getTo() > dayEnd) enabled = false;
+            if (dayEnd != -1 && iv.getFrom() > dayEnd) enabled = false;
         } catch (Exception e) {
             enabled = false; // invalid input or NumberFormatException result in no valid input
         }
@@ -132,6 +173,45 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         if(saveButton != null) {
             saveButton.setEnabled(enabled);
             saveButton.getIcon().setAlpha(enabled ? 255 : 130);
+        }
+    }
+
+    private void fixTimesDialog() {
+        String msg = getResources().getString(R.string.intervention) + ": \n";
+        msg += CustomBindingAdapters.longToDateTimeStr(iv.getFrom()) + " - " + CustomBindingAdapters.longToDateTimeStr(iv.getTo());
+        msg += "\n" + getResources().getString(R.string.shift) + ": \n";
+        msg += CustomBindingAdapters.longToDateTimeStr(dayStart) + " - " + CustomBindingAdapters.longToDateTimeStr(dayEnd);
+        msg += "\n" + getResources().getString(R.string.fixTimes);
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.interventionTimeInvalid))
+                .setMessage(msg)
+                .setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        fixTimes();
+                        fixTimes();
+                        binding.setItem(iv);
+                        conditionallyEnableSaveButton();
+                    }
+                })
+                .setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .show();
+    }
+
+    private void fixTimes() {
+        if (iv.getFrom() < dayStart) {
+            iv.setFrom(dayStart);
+        }
+        if (dayEnd != -1 && iv.getTo() > dayEnd) {
+            iv.setTo(dayEnd);
+        }
+        if (dayEnd != -1 && iv.getFrom() > dayEnd) {
+            iv.setFrom(dayStart);
         }
     }
 
@@ -215,17 +295,25 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
                         @Override
                         public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
                             if (isStart) {
-                                iv.setFrom(new HourMinute(hourOfDay, minute).toMillis());
+                                iv.setFrom(new HourMinute(hourOfDay, minute).toMillisSmart(dayStart));
                                 if (iv.getTo() == null) {
-                                    iv.setTo(iv.getFrom() + 60 * 60 * 1000); //Auto fill end time with 1 hour
+                                    iv.setTo(iv.getFrom() + TimeUnit.HOURS.toMillis(1)); //Auto fill end time with 1 hour
                                 }
                             } else {
-                                iv.setTo(new HourMinute(hourOfDay, minute).toMillis());
+                                iv.setTo(new HourMinute(hourOfDay, minute).toMillisSmart(dayStart));
                                 if (iv.getFrom() == null) {
-                                    iv.setFrom(iv.getTo() - 60 * 60 * 1000); //Auto fill end time with -1 hour
+                                    iv.setFrom(iv.getTo() - TimeUnit.HOURS.toMillis(1)); //Auto fill end time with -1 hour
                                 }
                             }
-                            if (iv.getFrom() >= iv.getTo()) Toasts.showEndTimeBeforeStart();
+                            if (iv.getFrom() < dayStart) {
+                                fixTimesDialog();
+                            } else if (dayEnd != -1 && iv.getTo() > dayEnd) {
+                                fixTimesDialog();
+                            } else if (dayEnd != -1 && iv.getFrom() > dayEnd) {
+                                fixTimesDialog();
+                            } else if (iv.getFrom() >= iv.getTo()) {
+                                fixTimesDialog();
+                            }
                             binding.setItem(iv);
                             conditionallyEnableSaveButton();
                         }

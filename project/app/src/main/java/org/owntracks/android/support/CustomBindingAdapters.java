@@ -6,7 +6,19 @@ import android.widget.EditText;
 
 import org.owntracks.android.support.widgets.HourMinute;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+
 public class CustomBindingAdapters {
+
+    @BindingConversion
+    public static String longToDateTimeStr(Long value) {
+        if (value == null) return "--:--";
+        SimpleDateFormat formatter = new SimpleDateFormat("EEE d MMM HH:mm");
+        Calendar c = Calendar.getInstance();
+        c.setTimeInMillis(value);
+        return formatter.format(c.getTime());
+    }
 
     @BindingConversion
     public static String longToTimeStr(Long value) {

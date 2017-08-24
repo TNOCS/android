@@ -105,7 +105,7 @@
                         android:layout_toLeftOf="@+id/startTime"
                         android:layout_marginRight="24dp"
                         android:gravity="center_vertical"
-                        android:text="@{CustomBindingAdapters.longToTimeStr(item.from)}"
+                        android:text="@{CustomBindingAdapters.longToDateTimeStr(item.from)}"
                         android:textSize="18sp"
                         android:id="@+id/startTimeText"/>
 
@@ -134,7 +134,7 @@
                         android:layout_below="@+id/startTimeText"
                         android:layout_alignRight="@+id/startTimeText"
                         android:gravity="center_vertical"
-                        android:text="@{CustomBindingAdapters.longToTimeStr(item.to)}"
+                        android:text="@{CustomBindingAdapters.longToDateTimeStr(item.to)}"
                         android:textSize="18sp"
                         android:id="@+id/endTimeText"/>
 

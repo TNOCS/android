@@ -58,7 +58,8 @@ public class MessageDay extends MessageBase{
         Day day = new Day();
 
         day.setDescription(getDesc());
-        day.setDate(new Date(TimeUnit.SECONDS.toMillis(getTst())));
+        day.setFrom(TimeUnit.SECONDS.toMillis(getTst()));
+        day.setTo(day.getFrom() + TimeUnit.HOURS.toMillis(8));
 
         return day;
     }
@@ -66,7 +67,7 @@ public class MessageDay extends MessageBase{
     public static MessageDay fromDaoObject(Day day) {
         MessageDay message = new MessageDay();
         message.setDesc(day.getDescription());
-        message.setTst(TimeUnit.MILLISECONDS.toSeconds(day.getDate().getTime()));
+        message.setTst(TimeUnit.MILLISECONDS.toSeconds(day.getFrom()));
         return message;
     }
 

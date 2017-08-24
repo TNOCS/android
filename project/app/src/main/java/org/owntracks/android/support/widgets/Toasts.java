@@ -29,6 +29,18 @@ public class Toasts {
         Toast.makeText(App.getContext(), App.getContext().getString(R.string.endBeforeStart), Toast.LENGTH_SHORT).show();
     }
 
+    public static void showStartTimeBeforeStart() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.startBeforeStart), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showEndTimeAfterEnd() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.endAfterEnd), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showStartTimeAfterEnd() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.startAfterEnd), Toast.LENGTH_SHORT).show();
+    }
+
     private static Toast stateChangeToast;
     public static void showEndpointStateChange(ServiceMessage.EndpointState state) {
         if(stateChangeToast != null)
@@ -60,5 +72,13 @@ public class Toasts {
 
     public static void showTodayAlreadyAdded() {
         Toast.makeText(App.getContext(), App.getContext().getString(R.string.todayAlreadyAdded), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showResumeDay() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.resumeDay), Toast.LENGTH_SHORT).show();
+    }
+
+    public static void showStartDay() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.startDay), Toast.LENGTH_SHORT).show();
     }
 }

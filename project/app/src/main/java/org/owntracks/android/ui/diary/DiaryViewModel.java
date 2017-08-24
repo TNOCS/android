@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
+import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import android.os.Bundle;
@@ -21,23 +22,40 @@ import org.owntracks.android.db.Day;
 import org.owntracks.android.db.DayDao;
 import org.owntracks.android.injection.qualifier.AppContext;
 import org.owntracks.android.injection.scopes.PerActivity;
+import org.owntracks.android.support.CustomBindingAdapters;
+import org.owntracks.android.support.DaySort;
 import org.owntracks.android.support.Events;
+import org.owntracks.android.support.InterventionSort;
+import org.owntracks.android.support.Preferences;
+import org.owntracks.android.support.widgets.HourMinute;
 import org.owntracks.android.support.widgets.Toasts;
 import org.owntracks.android.ui.base.viewmodel.BaseViewModel;
 import org.owntracks.android.ui.interventions.InterventionsActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
 
 
 @PerActivity
-public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements DiaryMvvm.ViewModel<DiaryMvvm.View> {
+public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements DiaryMvvm.ViewModel<DiaryMvvm.View>, CompoundButton.OnCheckedChangeListener {
 
     private DayDao dao;
     private boolean noDaysLogged = true;
+    private DaySort daySort = new DaySort();
+    private DiaryAdapter diaryAdapter;
+
+    public DiaryAdapter getDiaryAdapter() {
+        return diaryAdapter;
+    }
+
+    public void setDiaryAdapter(DiaryAdapter diaryAdapter) {
+        this.diaryAdapter = diaryAdapter;
+    }
 
     @Inject
     public DiaryViewModel(@AppContext Context context) {
@@ -52,6 +70,7 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
     public ObservableList<Day> getDays() {
         ObservableList<Day> dayList = new ObservableArrayList<Day>();
         dayList.addAll(this.dao.loadAll());
+        Collections.sort(dayList, daySort);
         return dayList;
     }
 
@@ -69,12 +88,15 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
     @Override
     public boolean isTodayAlreadyAdded() {
         boolean alreadyAdded = false;
+        Calendar today = Calendar.getInstance();
+        Calendar loggedDate = Calendar.getInstance();
         for (Day day: getDays()) {
-            Calendar today = Calendar.getInstance();
-            Calendar loggedDate = Calendar.getInstance();
-            loggedDate.setTime(day.getDate());
-            if ( loggedDate.get(Calendar.DAY_OF_YEAR) == today.get(Calendar.DAY_OF_YEAR)
-                    && loggedDate.get(Calendar.YEAR) == today.get(Calendar.YEAR)) {
+            if (day.getTo() == null) break;
+            loggedDate.setTimeInMillis(day.getTo());
+            // If the last day/shift ended within 4 hours, continue the shift
+            //TODO
+//            if ( today.getTimeInMillis() - loggedDate.getTimeInMillis() < TimeUnit.HOURS.toMillis(4)) {
+            if ( today.getTimeInMillis() - loggedDate.getTimeInMillis() < TimeUnit.MINUTES.toMillis(2)) {
                 alreadyAdded = true;
                 break;
             }
@@ -83,19 +105,47 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
     }
 
     @Override
+    public void updateAdapter() {
+        diaryAdapter.setItems(getDays());
+        checkDays();
+    }
+
+    @Override
     public void addToday() {
-        if (isTodayAlreadyAdded()) {
-            Toasts.showTodayAlreadyAdded();
-            return;
-        }
-        SimpleDateFormat formatter = new SimpleDateFormat("dd-MM-yyyy");
-        Date date = new Date();
+        if (isTodayAlreadyAdded()) return;
         Day day = new Day();
-        day.setDate(date);
-        day.setDescription(formatter.format(date));
+        day.setFrom(HourMinute.getFlooredCalender().getTimeInMillis());
+        day.setTo(null);
+        String description = CustomBindingAdapters.longToDateTimeStr(day.getFrom()) + " - ...";
+        day.setDescription(description);
         this.dao.insert(day);
         this.checkDays();
         App.getEventBus().post(new Events.DayAdded(day));
+        Toasts.showStartDay();
+    }
+
+    private void resumeToday() {
+        if (getDays().isEmpty()) return;
+        Day day = getDays().get(0);
+        day.setTo(null);
+        String description = CustomBindingAdapters.longToDateTimeStr(day.getFrom()) + " - ...";
+        day.setDescription(description);
+        this.dao.update(day);
+        this.checkDays();
+        App.getEventBus().post(new Events.DayUpdated(day));
+        Toasts.showResumeDay();
+    }
+
+    private void endToday() {
+        if (getDays().isEmpty()) return;
+        Day day = getDays().get(0);
+        day.setTo(HourMinute.getCeiledCalender().getTimeInMillis());
+        String description = CustomBindingAdapters.longToDateTimeStr(day.getFrom());
+        description += " - " + CustomBindingAdapters.longToDateTimeStr(day.getTo());
+        day.setDescription(description);
+        this.dao.update(day);
+        this.checkDays();
+        App.getEventBus().post(new Events.DayUpdated(day));
     }
 
     @Override
@@ -103,5 +153,25 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
         Bundle b = new Bundle();
         b.putLong(InterventionsActivity.BUNDLE_KEY_INTERVENTIONS_ID, day.getId());
         navigator.get().startActivity(InterventionsActivity.class, b);
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+        Preferences.setPub(isChecked);
+        if (isChecked) {
+            if (isTodayAlreadyAdded()) {
+                this.resumeToday();
+            } else {
+                this.addToday();
+            }
+        } else {
+            this.endToday();
+        }
+        updateAdapter();
+    }
+
+    @Override
+    public void syncWithServer() {
+
     }
 }

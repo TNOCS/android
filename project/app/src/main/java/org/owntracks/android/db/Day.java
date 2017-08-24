@@ -18,13 +18,15 @@ public class Day {
 
     @NotNull
     private String description;
-    private java.util.Date date;
+    private Long from;
+    private Long to;
 
-    @Generated(hash = 1925857483)
-    public Day(Long id, @NotNull String description, java.util.Date date) {
+    @Generated(hash = 406145378)
+    public Day(Long id, @NotNull String description, Long from, Long to) {
         this.id = id;
         this.description = description;
-        this.date = date;
+        this.from = from;
+        this.to = to;
     }
 
     @Generated(hash = 866989762)
@@ -53,14 +55,22 @@ public class Day {
         this.description = description;
     }
 
-    public java.util.Date getDate() {
-        return date;
+
+    public Long getFrom() {
+        return from;
     }
 
-    public void setDate(java.util.Date date) {
-        this.date = date;
+    public void setFrom(Long from) {
+        this.from = from;
     }
 
+    public Long getTo() {
+        return to;
+    }
+
+    public void setTo(Long to) {
+        this.to = to;
+    }
 
     public void setDefaults() {
     }

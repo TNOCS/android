@@ -86,7 +86,7 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
 
     @Override
     public void onClick(@NonNull Intervention object, @NonNull View view, boolean longClick) {
-        viewModel.onInterventionClick(object, view, longClick);
+        viewModel.onInterventionClick(object, view.getContext(), longClick);
     }
 
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -101,8 +101,7 @@ public class InterventionsActivity extends BaseActivity<UiActivityInterventionsB
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.menu_addintervention) {
-            Intent detailIntent = new Intent(this, ActivityIntervention.class);
-            startActivity(detailIntent);
+            viewModel.addIntervention(this);
             return true;
         }
         return false;

@@ -278,5 +278,19 @@
     <string name="delete_intervention_quest">Are you sure you want to delete this intervention?</string>
     <string name="interventionReminderDesc">Don\'t forget to fill in your interventions</string>
     <string name="trackingActive">Activate tracking </string>
+    <string name="startBeforeStart">Intervention cannot start before the shift started</string>
+    <string name="endAfterEnd">Intervention cannot end after your shift ended</string>
+    <string name="startAfterEnd">Intervention cannot start after your shift ended</string>
+    <string name="fixStartBeforeStart">Changed intervention start to the shift start</string>
+    <string name="yes">yes</string>
+    <string name="no">no</string>
+    <string name="intervention">intervention</string>
+    <string name="shift">shift</string>
+    <string name="resumeDay">Resume the latest shift</string>
+    <string name="startDay">Started a new shift</string>
+    <string name="fixEndAfterEnd">Changed intervention end to the shift end</string>
+    <string name="fixStartAfterEnd">Changed intervention start to the shift start</string>
+    <string name="interventionTimeInvalid">Intervention time is within the shift</string>
+    <string name="fixTimes">Automatically fix times to be within the shift?</string>
 
 </resources>

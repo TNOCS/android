@@ -1,6 +1,5 @@
 package org.owntracks.android.ui.diary;
 
-import android.app.PendingIntent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -9,10 +8,8 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.Switch;
 
-import org.owntracks.android.App;
 import org.owntracks.android.R;
 import org.owntracks.android.activities.ActivityWelcome;
 import org.owntracks.android.databinding.UiActivityDiaryBinding;
@@ -25,7 +22,6 @@ import timber.log.Timber;
 
 public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvvm.ViewModel> implements DiaryMvvm.View, org.owntracks.android.ui.diary.DiaryAdapter.ClickListener {
     private Menu mMenu;
-    private DiaryAdapter diaryAdapter;
     private Switch mTrackingSwitch;
 
     @Override
@@ -41,19 +37,13 @@ public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvv
         setSupportToolbar(binding.toolbar);
         setDrawer(binding.toolbar);
 
-        diaryAdapter = new DiaryAdapter(viewModel.getDays(), this);
-
+        viewModel.setDiaryAdapter(new DiaryAdapter(viewModel.getDays(), this));
         binding.recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        binding.recyclerView.setAdapter(diaryAdapter);
+        binding.recyclerView.setAdapter(viewModel.getDiaryAdapter());
 
         mTrackingSwitch = (Switch)findViewById(R.id.trackingswitch);
         mTrackingSwitch.setChecked(Preferences.getPub());
-        mTrackingSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
-                Preferences.setPub(isChecked);
-            }
-        });
+        mTrackingSwitch.setOnCheckedChangeListener(viewModel);
     }
 
     @Override
@@ -74,7 +64,7 @@ public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvv
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.activity_addtoday, menu);
+        inflater.inflate(R.menu.activity_refresh, menu);
         this.mMenu = menu;
         if (viewModel.isTodayAlreadyAdded()) {
             disableAddTodayMenu();
@@ -85,27 +75,28 @@ public class DiaryActivity extends BaseActivity<UiActivityDiaryBinding, DiaryMvv
     }
 
     private void disableAddTodayMenu() {
-        this.mMenu.findItem(R.id.menu_addtoday).getIcon().setAlpha(130);
+        this.mMenu.findItem(R.id.menu_refresh).getIcon().setAlpha(130);
     }
 
     private void enableAddTodayMenu() {
-        this.mMenu.findItem(R.id.menu_addtoday).getIcon().setAlpha(255);
+        this.mMenu.findItem(R.id.menu_refresh).getIcon().setAlpha(255);
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
-        if (itemId == R.id.menu_addtoday) {
-            viewModel.addToday();
+        if (itemId == R.id.menu_refresh) {
+            viewModel.syncWithServer();
             updateAdapter();
-            return true;
+//            return true;
         }
         return false;
     }
 
     private void updateAdapter() {
-        viewModel.checkDays();
-        diaryAdapter.setItems(viewModel.getDays());
-        binding.recyclerView.postInvalidate();
+        viewModel.updateAdapter();
+//        viewModel.checkDays();
+//        diaryAdapter.setItems(viewModel.getDays());
+//        binding.recyclerView.postInvalidate();
     }
 }

@@ -82,14 +82,23 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
     @Override
     public ObservableList<Intervention> getInterventions() {
         Day day = this.dayDao.loadByRowId(getDayId());
-        Calendar dayCal = getDayCalendar(day);
+        Calendar from = Calendar.getInstance();
+        from.setTimeInMillis(day.getFrom());
+        Calendar to = null;
+        if (day.getTo() != null) {
+            to = Calendar.getInstance();
+            to.setTimeInMillis(day.getTo());
+        }
 
         ObservableList<Intervention> ivList = new ObservableArrayList<Intervention>();
         for (Intervention iv: this.ivDao.loadAll()) {
             Calendar ivCal = getInterventionCalendar(iv);
-            if (ivCal.get(Calendar.DAY_OF_YEAR) == dayCal.get(Calendar.DAY_OF_YEAR)
-                    && ivCal.get(Calendar.YEAR) == dayCal.get(Calendar.YEAR)) {
-                ivList.add(iv);
+            if (ivCal.getTimeInMillis() >= from.getTimeInMillis()) {
+                if (to != null && ivCal.getTimeInMillis() <= to.getTimeInMillis()) {
+                    ivList.add(iv);
+                } else if (to == null) {
+                    ivList.add(iv);
+                }
             }
         }
         Collections.sort(ivList, interventionSort);
@@ -98,7 +107,7 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
 
     private Calendar getDayCalendar(Day day) {
         Calendar cal = Calendar.getInstance();
-        cal.setTime(day.getDate());
+        cal.setTimeInMillis(day.getFrom());
         return cal;
     }
 
@@ -132,6 +141,20 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
         App.getEventBus().post(new Events.InterventionRemoved(iv)); // For ServiceLocator update
     }
 
+    public void addIntervention(Context context) {
+        this.openInterventionActivity(context, null);
+    }
+
+    private void openInterventionActivity(Context context, Intervention iv) {
+        Intent detailIntent = new Intent(context, ActivityIntervention.class);
+        if (iv != null) {
+            detailIntent.putExtra("ivId", iv.getId());
+        }
+        detailIntent.putExtra("dayStartId", this.dayDao.loadByRowId(this.dayId).getFrom());
+        detailIntent.putExtra("dayEndId", this.dayDao.loadByRowId(this.dayId).getTo());
+        context.startActivity(detailIntent);
+    }
+
     @Bindable
     public boolean getNoInterventionsLogged() {
         this.checkInterventions();
@@ -139,17 +162,15 @@ public class InterventionsViewModel extends BaseViewModel<InterventionsMvvm.View
     }
 
     @Override
-    public void onInterventionClick(Intervention iv, View view, boolean longClick) {
+    public void onInterventionClick(Intervention iv, Context context, boolean longClick) {
         if (longClick == false) {
-            Intent detailIntent = new Intent(view.getContext(), ActivityIntervention.class);
-            detailIntent.putExtra("keyId", iv.getId());
-            view.getContext().startActivity(detailIntent);
+            this.openInterventionActivity(context, iv);
         } else {
             final Long ivId = iv.getId();
             AlertDialog.Builder builder;
-            builder = new AlertDialog.Builder(view.getContext());
-            builder.setTitle(view.getResources().getString(R.string.delete_intervention))
-                    .setMessage(view.getResources().getString(R.string.delete_intervention_quest))
+            builder = new AlertDialog.Builder(context);
+            builder.setTitle(context.getResources().getString(R.string.delete_intervention))
+                    .setMessage(context.getResources().getString(R.string.delete_intervention_quest))
                     .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int which) {
                             deleteIntervention(ivId);

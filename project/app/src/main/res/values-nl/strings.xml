@@ -49,4 +49,17 @@
     <string name="interventionReminderDesc">Vergeet niet om je interventies in te vullen</string>
     <string name="menuClear">Leegmaken</string>
     <string name="trackingActive">Activeer tracking </string>
+    <string name="startBeforeStart">De interventie start vóór de dienst</string>
+    <string name="endAfterEnd">Interventie eindigt na de dienst</string>
+    <string name="fixStartBeforeStart">Wil je de interventie naar de volgende dag verplaatsen?</string>
+    <string name="yes">ja</string>
+    <string name="no">nee</string>
+    <string name="intervention">interventie</string>
+    <string name="shift">dienst</string>
+    <string name="resumeDay">Hervat de laatste dienst</string>
+    <string name="startDay">Een nieuwe dienst is gestart</string>
+    <string name="fixEndAfterEnd">Wil je de interventie naar de vorige dag verplaatsen?</string>
+    <string name="interventionTimeInvalid">Interventie vindt niet plaats tijdens de dienst</string>
+    <string name="fixTimes">Interventie tijd automatisch aanpassen naar de diensttijd?</string>
+
 </resources>

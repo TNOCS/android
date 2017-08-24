@@ -1,5 +1,6 @@
 package org.owntracks.android.ui.interventions;
 
+import android.content.Context;
 import android.databinding.ObservableList;
 
 import org.owntracks.android.db.Intervention;
@@ -28,9 +29,10 @@ public interface InterventionsMvvm {
         ObservableList<Intervention> getInterventions();
         InterventionsAdapter getInterventionsAdapter();
         void setInterventionsAdapter(InterventionsAdapter interventionsAdapter);
+        void addIntervention(Context context);
         void checkInterventions();
         void updateAdapter();
         void setDayId(Long dayId);
-        void onInterventionClick(Intervention iv, android.view.View view, boolean longClick);
+        void onInterventionClick(Intervention iv, Context context, boolean longClick);
     }
 }

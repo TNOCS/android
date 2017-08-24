@@ -31,7 +31,7 @@
     <integer name="valMqttProtocolLevel">3</integer>
     <integer name="valNotificationReminderInterval">60</integer>
 
-    <bool name="valPub">true</bool>
+    <bool name="valPub">false</bool>
     <bool name="valCleanSession">false</bool>
     <bool name="valCp">false</bool>
     <bool name="valPubExtendedData">true</bool>
