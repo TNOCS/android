@@ -118,7 +118,6 @@ public class MessageIntervention extends MessageBase{
         message.setSubtype(iv.getSubtype());
         message.setFrom(iv.getFrom());
         message.setTo(iv.getTo());
-        message.setId(iv.getId().toString());
         message.setTst(TimeUnit.MILLISECONDS.toSeconds(new Date().getTime()));
         return message;
     }

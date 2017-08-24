@@ -17,6 +17,7 @@ import org.owntracks.android.messages.MessageBase;
 import org.owntracks.android.messages.MessageCard;
 import org.owntracks.android.messages.MessageClear;
 import org.owntracks.android.messages.MessageCmd;
+import org.owntracks.android.messages.MessageIntervention;
 import org.owntracks.android.messages.MessageLocation;
 import org.owntracks.android.messages.MessageTransition;
 import org.owntracks.android.messages.MessageUnknown;
@@ -163,7 +164,7 @@ public class ServiceMessage implements ProxyableService, IncomingMessageProcesso
 
     private LongSparseArray<MessageBase> outgoingQueue = new LongSparseArray<>();
 
-    void sendMessage(MessageBase message) {
+    public void sendMessage(MessageBase message) {
         Timber.v("endpoint:%s, message:%s",endpoint, message);
 
         message.setOutgoing();
@@ -324,4 +325,8 @@ public class ServiceMessage implements ProxyableService, IncomingMessageProcesso
         ServiceProxy.getServiceNotification().processMessage(message);
     }
 
+    @Override
+    public void processIncomingMessage(MessageIntervention message) {
+//        ServiceProxy.getServiceNotification().processMessage(message);
+    }
 }

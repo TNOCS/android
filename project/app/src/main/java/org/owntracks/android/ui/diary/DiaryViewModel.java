@@ -22,6 +22,8 @@ import org.owntracks.android.db.Day;
 import org.owntracks.android.db.DayDao;
 import org.owntracks.android.injection.qualifier.AppContext;
 import org.owntracks.android.injection.scopes.PerActivity;
+import org.owntracks.android.messages.MessageIntervention;
+import org.owntracks.android.services.ServiceProxy;
 import org.owntracks.android.support.CustomBindingAdapters;
 import org.owntracks.android.support.DaySort;
 import org.owntracks.android.support.Events;
@@ -172,6 +174,9 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
 
     @Override
     public void syncWithServer() {
-
+        MessageIntervention message = new MessageIntervention();
+        message._custom_endpoint = true; // Send it to the json webservice
+        message._custom_CRUD = "G"; // Get it
+        ServiceProxy.getServiceMessage().sendMessage(message);
     }
 }

@@ -274,10 +274,12 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         HourMinute hm;
         switch (v.getId()) {
             case R.id.startTime:
+                // start timepicker with the intervention start time, or current time if null
                 hm = HourMinute.fromMillis(iv.getFrom(), true);
                 pickTime(hm.getHour(), hm.getMinute(), true);
                 break;
             case R.id.endTime:
+                // start timepicker with the intervention end time, or current time if null
                 hm = HourMinute.fromMillis(iv.getTo(), true);
                 pickTime(hm.getHour(), hm.getMinute(), false);
                 break;

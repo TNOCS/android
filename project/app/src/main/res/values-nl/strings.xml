@@ -54,8 +54,8 @@
     <string name="fixStartBeforeStart">Wil je de interventie naar de volgende dag verplaatsen?</string>
     <string name="yes">ja</string>
     <string name="no">nee</string>
-    <string name="intervention">interventie</string>
-    <string name="shift">dienst</string>
+    <string name="intervention">Interventie</string>
+    <string name="shift">Dienst</string>
     <string name="resumeDay">Hervat de laatste dienst</string>
     <string name="startDay">Een nieuwe dienst is gestart</string>
     <string name="fixEndAfterEnd">Wil je de interventie naar de vorige dag verplaatsen?</string>

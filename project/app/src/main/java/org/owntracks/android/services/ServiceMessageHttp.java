@@ -17,6 +17,7 @@ import com.google.android.gms.gcm.Task;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.owntracks.android.App;
+import org.owntracks.android.db.Intervention;
 import org.owntracks.android.messages.MessageBase;
 import org.owntracks.android.messages.MessageClear;
 import org.owntracks.android.messages.MessageCmd;
@@ -226,7 +227,7 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
     }
 
     public static int postMessageExtended(final String body, @Nullable final String url, @Nullable final String userInfo, final Context c, final Long messageId, final String CRUD) {
-        Timber.v("url:%s, userInfo:%s, messageId:%s", url, userInfo,  messageId);
+        Timber.v("url:%s, userInfo:%s, messageId:%s, %s", url, userInfo,  messageId, CRUD);
 
         if(url == null) {
             Timber.e("url not configured. messageId:%s", messageId);
@@ -239,7 +240,12 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
             return GcmNetworkManager.RESULT_RESCHEDULE;
         }
 
-        Request.Builder request = new Request.Builder().url(url).method(CRUD, RequestBody.create(JSON, body));
+        Request.Builder request;
+        if (CRUD == "GET") {
+            request = new Request.Builder().url(url).get();
+        } else {
+            request = new Request.Builder().url(url).method(CRUD, RequestBody.create(JSON, body));
+        }
 
          if(userInfo != null) {
             request.header(HEADER_AUTHORIZATION, "Basic " + android.util.Base64.encodeToString(userInfo.getBytes(), Base64.NO_WRAP));
@@ -263,8 +269,13 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
 
                  try {
                      //Timber.v("code: %s, streaming response to parser", r.body().string() );
-
-                     MessageBase[] result = Parser.fromJson(r.body().byteStream());
+                     MessageBase[] result;
+                     if (CRUD == "GET") {
+                         //custom parser for interventions
+                         result = Intervention.readJsonStream(r.body().byteStream());
+                     } else {
+                         result = Parser.fromJson(r.body().byteStream());
+                     }
                      ServiceProxy.getServiceMessage().onEndpointStateChanged(EndpointState.IDLE, "Response "+r.code() + ", " + result.length);
 
                      for (MessageBase aResult : result) {
@@ -344,6 +355,8 @@ e.printStackTrace();                } catch (Parser.EncryptionException e) {
             postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "DELETE");
         } else if (message._custom_CRUD != null && message._custom_CRUD == "U") {
             postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "PUT");
+        } else if (message._custom_CRUD != null && message._custom_CRUD == "G") {
+            postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "GET");
         } else {
             postMessageExtended(wireMessage, endpoint, this.endpointUserInfo, context, message.getMessageId(), "POST");
         }
