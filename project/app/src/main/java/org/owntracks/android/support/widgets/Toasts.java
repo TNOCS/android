@@ -81,4 +81,8 @@ public class Toasts {
     public static void showStartDay() {
         Toast.makeText(App.getContext(), App.getContext().getString(R.string.startDay), Toast.LENGTH_SHORT).show();
     }
+
+    public static void showInterventionsSent() {
+        Toast.makeText(App.getContext(), App.getContext().getString(R.string.interventionsSent), Toast.LENGTH_SHORT).show();
+    }
 }

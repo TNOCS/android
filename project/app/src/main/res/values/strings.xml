@@ -293,5 +293,6 @@
     <string name="fixStartAfterEnd">Changed intervention start to the shift start</string>
     <string name="interventionTimeInvalid">Intervention time is within the shift</string>
     <string name="fixTimes">Automatically fix times to be within the shift?</string>
+    <string name="interventionsSent">Sending interventions to server</string>
 
 </resources>

@@ -15,6 +15,7 @@
     <string name="mode_http_private_label">HTTP Privaat</string>
     <string name="mode_mqtt_private_label">MQTT Privaat</string>
     <string name="mode_mqtt_public_label">MQTT Publiek</string>
+    <string name="interventionsSent">Interventies worden verstuurd</string>
     <string name="seconds">Secondes</string>
     <string name="welcome_heading">Welkom</string>
     <string name="welcomeFixIssue">Permissie geven</string>

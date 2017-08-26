@@ -179,7 +179,7 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
     @Override
     public void syncWithServer() {
         sendLocalInterventions();
-        getRemoteInterventions();
+//        getRemoteInterventions();
     }
 
     private void sendLocalInterventions() {
@@ -188,6 +188,7 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
         for (Intervention iv : list) {
             App.getEventBus().post(new Events.InterventionAdded(iv)); // For ServiceLocator update
         }
+        Toasts.showInterventionsSent();
     }
 
     private void getRemoteInterventions() {
