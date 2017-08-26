@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">PoliceTracks</string>
+    <string name="syncServer">Synchroniseer met server</string>
     <string name="CONNECTED">Verbonden</string>
     <string name="CONNECTING">Verbinden</string>
     <string name="DISCONNECTED">Verbroken</string>
@@ -39,7 +40,7 @@
     <string name="messageQueued">Bericht wacht op verzending</string>
     <string name="mode_description">PoliceTracks kan op meerdere manieren verbinden. Kies de HTTP-privaat modus voor het experiment.</string>
     <string name="mode_heading"></string>
-    <string name="title_activity_diary">Dagboek</string>
+    <string name="title_activity_diary">Dienstoverzicht</string>
     <string name="title_activity_interventions">Interventies</string>
     <string name="title_activity_map">Kaart</string>
     <string name="title_activity_region">Regio</string>
@@ -61,5 +62,6 @@
     <string name="fixEndAfterEnd">Wil je de interventie naar de vorige dag verplaatsen?</string>
     <string name="interventionTimeInvalid">Interventie vindt niet plaats tijdens de dienst</string>
     <string name="fixTimes">Interventie tijd automatisch aanpassen naar de diensttijd?</string>
+    <string name="welcomeFixQuit">Afsluiten</string>
 
 </resources>

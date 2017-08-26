@@ -5,6 +5,7 @@ import android.databinding.Bindable;
 import android.databinding.BindingAdapter;
 import android.databinding.ObservableArrayList;
 import android.databinding.ObservableList;
+import android.util.Log;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
@@ -20,6 +21,8 @@ import org.owntracks.android.R;
 import org.owntracks.android.db.Dao;
 import org.owntracks.android.db.Day;
 import org.owntracks.android.db.DayDao;
+import org.owntracks.android.db.Intervention;
+import org.owntracks.android.db.InterventionDao;
 import org.owntracks.android.injection.qualifier.AppContext;
 import org.owntracks.android.injection.scopes.PerActivity;
 import org.owntracks.android.messages.MessageIntervention;
@@ -38,6 +41,7 @@ import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import javax.inject.Inject;
@@ -96,9 +100,8 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
             if (day.getTo() == null) break;
             loggedDate.setTimeInMillis(day.getTo());
             // If the last day/shift ended within 4 hours, continue the shift
-            //TODO
-//            if ( today.getTimeInMillis() - loggedDate.getTimeInMillis() < TimeUnit.HOURS.toMillis(4)) {
-            if ( today.getTimeInMillis() - loggedDate.getTimeInMillis() < TimeUnit.MINUTES.toMillis(2)) {
+            if ( today.getTimeInMillis() - loggedDate.getTimeInMillis() < TimeUnit.HOURS.toMillis(4)) {
+//            if ( today.getTimeInMillis() - loggedDate.getTimeInMillis() < TimeUnit.MINUTES.toMillis(2)) {
                 alreadyAdded = true;
                 break;
             }
@@ -170,10 +173,24 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
             this.endToday();
         }
         updateAdapter();
+        ServiceProxy.getServiceNotification().updateNotificationOngoing();
     }
 
     @Override
     public void syncWithServer() {
+        sendLocalInterventions();
+        getRemoteInterventions();
+    }
+
+    private void sendLocalInterventions() {
+        InterventionDao dao = Dao.getInterventionDao();
+        List<Intervention> list = dao.loadAll();
+        for (Intervention iv : list) {
+            App.getEventBus().post(new Events.InterventionAdded(iv)); // For ServiceLocator update
+        }
+    }
+
+    private void getRemoteInterventions() {
         MessageIntervention message = new MessageIntervention();
         message._custom_endpoint = true; // Send it to the json webservice
         message._custom_CRUD = "G"; // Get it

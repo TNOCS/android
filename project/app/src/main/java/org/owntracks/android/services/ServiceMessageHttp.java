@@ -279,8 +279,8 @@ public class ServiceMessageHttp implements StatelessMessageEndpoint, OutgoingMes
                      ServiceProxy.getServiceMessage().onEndpointStateChanged(EndpointState.IDLE, "Response "+r.code() + ", " + result.length);
 
                      for (MessageBase aResult : result) {
-                        onMessageReceived(aResult);
-                    }
+                         onMessageReceived(aResult);
+                     }
 
                 //Non JSON return value
                 } catch (IOException e) {

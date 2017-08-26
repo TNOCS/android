@@ -7,12 +7,17 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.content.res.Resources;
+import android.databinding.ObservableArrayList;
+import android.databinding.ObservableList;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.util.LongSparseArray;
 
 import org.greenrobot.eventbus.Subscribe;
 import org.owntracks.android.App;
+import org.owntracks.android.db.Dao;
+import org.owntracks.android.db.Intervention;
+import org.owntracks.android.db.InterventionDao;
 import org.owntracks.android.messages.MessageBase;
 import org.owntracks.android.messages.MessageCard;
 import org.owntracks.android.messages.MessageClear;
@@ -327,6 +332,17 @@ public class ServiceMessage implements ProxyableService, IncomingMessageProcesso
 
     @Override
     public void processIncomingMessage(MessageIntervention message) {
-//        ServiceProxy.getServiceNotification().processMessage(message);
+        if (message == null) return;
+
+        InterventionDao dao = Dao.getInterventionDao();
+
+        Intervention msgIntervention = message.toDaoObject();
+        if (msgIntervention.getId() == null) return;
+
+        if (dao.loadByRowId(msgIntervention.getId()) == null) {
+            long id = dao.insert(msgIntervention);
+            Log.v(TAG, "added intervention with id: " + id);
+            App.getEventBus().post(new Events.InterventionAdded(msgIntervention)); // For ServiceLocator update
+        }
     }
 }

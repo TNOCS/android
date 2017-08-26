@@ -6,6 +6,6 @@
         android:icon="@drawable/ic_refresh_white_24dp"
         android:orderInCategory="1"
         app:showAsAction="never"
-        android:title="@string/refresh"/>
+        android:title="@string/syncServer"/>
 
 </menu>

@@ -148,6 +148,7 @@
     <string name="mode_mqtt_public_label">Public MQTT</string>
 
     <string name="refresh">Refresh</string>
+    <string name="syncServer">Synchronize with server</string>
     <string name="connectivityDisconnectedConfigIncomplete">Connection not configured</string>
 
     <string name="snackbarImportCompleted">Preferences imported</string>
@@ -162,7 +163,7 @@
     <string name="locationPermissionNotAvailable">Location access denied</string>
     <string name="title_activity_regions">Regions</string>
     <string name="title_activity_region">Region</string>
-    <string name="title_activity_diary">Diary</string>
+    <string name="title_activity_diary">Shifts overview</string>
     <string name="title_activity_map">Map</string>
     <string name="title_activity_contacts">Friends</string>
     <string name="title_activity_status">Status</string>

@@ -218,21 +218,17 @@ public class ServiceNotification implements ProxyableService {
             return;
 
         String subtitle = notificationOngoingLastStateCache.getLabel(context);
-
-        if (isLastPublishedLocationWithGeocoderAvailable() && Preferences.getNotificationLocation()) {
             String msg = "Tracking ";
             if (Preferences.getPub())
                 msg += "ACTIVE";
             else
                 msg += "NOT active";
+
+        if (isLastPublishedLocationWithGeocoderAvailable() && Preferences.getNotificationLocation()) {
             msg += ". " + this.notificationOngoingLastLocationCache.getGeocoder();
-            notificationBuilderOngoing.setContentTitle(msg);
             notificationBuilderOngoing.setWhen(TimeUnit.SECONDS.toMillis(this.notificationOngoingLastLocationCache.getTst()));
-
-        } else {
-            notificationBuilderOngoing.setContentTitle(this.context.getString(R.string.app_name));
         }
-
+        notificationBuilderOngoing.setContentTitle(msg);
 
 
         if(Preferences.getNotificationHigherPriority())
