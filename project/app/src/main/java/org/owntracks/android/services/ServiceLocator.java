@@ -567,6 +567,7 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
             message._custom_CRUD = "U"; // Update it
         }
         ServiceProxy.getServiceMessage().sendMessage(message);
+        handleInterventionReminder(null);
     }
 
     private void handleWaypoint(Waypoint w, boolean update, boolean remove) {

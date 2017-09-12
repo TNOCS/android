@@ -49,6 +49,10 @@ android {
         enabled = true
     }
 
+    lintOptions{
+        disable 'MissingTranslation'
+    }
+
     sourceSets {
         main {
             jniLibs.srcDir 'jniLibs'

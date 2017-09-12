@@ -4,6 +4,7 @@ import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.Notification;
 import android.app.PendingIntent;
+import android.app.Service;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Typeface;
@@ -218,11 +219,11 @@ public class ServiceNotification implements ProxyableService {
             return;
 
         String subtitle = notificationOngoingLastStateCache.getLabel(context);
-            String msg = "Tracking ";
-            if (Preferences.getPub())
-                msg += "ACTIVE";
-            else
-                msg += "NOT active";
+        String msg = "Tracking ";
+        if (Preferences.getPub())
+            msg += "ACTIVE";
+        else
+            msg += "NOT active";
 
         if (isLastPublishedLocationWithGeocoderAvailable() && Preferences.getNotificationLocation()) {
             msg += ". " + this.notificationOngoingLastLocationCache.getGeocoder();
@@ -237,7 +238,11 @@ public class ServiceNotification implements ProxyableService {
             notificationBuilderOngoing.setPriority(NotificationCompat.PRIORITY_MIN);
 
         notificationBuilderOngoing.setSmallIcon(R.drawable.ic_notification).setContentText(subtitle);
-        this.context.startForeground(NOTIFICATION_ID_ONGOING, notificationBuilderOngoing.build());
+
+        if (Preferences.getPub())
+            this.context.startForeground(NOTIFICATION_ID_ONGOING, notificationBuilderOngoing.build());
+        else
+            this.context.stopForeground(true);
     }
 
 
