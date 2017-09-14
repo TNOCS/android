@@ -294,5 +294,7 @@
     <string name="interventionTimeInvalid">Intervention time is within the shift</string>
     <string name="fixTimes">Automatically fix times to be within the shift?</string>
     <string name="interventionsSent">Sending interventions to server</string>
+    <string name="cannotSetTime">The selected time is not within the selected shift or is in the future.</string>
+    <string name="chooseTimeBetween">Choose a time between</string>
 
 </resources>

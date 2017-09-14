@@ -13,7 +13,7 @@ public class CustomBindingAdapters {
 
     @BindingConversion
     public static String longToDateTimeStr(Long value) {
-        if (value == null) return "--:--";
+        if (value == null || value == -1) return "--:--";
         SimpleDateFormat formatter = new SimpleDateFormat("EEE d MMM HH:mm");
         Calendar c = Calendar.getInstance();
         c.setTimeInMillis(value);

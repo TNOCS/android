@@ -53,6 +53,22 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
     private long dayStart = -1;
     private long dayEnd = -1;
 
+    public long getDayStart() {
+        return dayStart;
+    }
+
+    public void setDayStart(long dayStart) {
+        this.dayStart = dayStart;
+    }
+
+    public long getDayEnd() {
+        return dayEnd;
+    }
+
+    public void setDayEnd(long dayEnd) {
+        this.dayEnd = dayEnd;
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,10 +90,10 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         if (hasIntentExtras()) {
             this.iv = this.dao.loadByRowId(getIntent().getExtras().getLong("ivId"));
             if (getIntent().getExtras().getLong("dayStartId", -1) != -1) {
-                this.dayStart = getIntent().getExtras().getLong("dayStartId");
+                setDayStart(getIntent().getExtras().getLong("dayStartId"));
             }
             if (getIntent().getExtras().getLong("dayEndId", -1) != -1) {
-                this.dayEnd = getIntent().getExtras().getLong("dayEndId");
+                setDayEnd(getIntent().getExtras().getLong("dayEndId"));
             }
         }
 
@@ -162,7 +178,7 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
             if (binding.spinnerIvtype.getSelectedItem() == null) enabled = false;
             if (iv.getFrom() == null) enabled = false;
             if (iv.getTo() == null) enabled = false;
-            if (iv.getFrom() >= iv.getTo()) enabled = false;
+            if (iv.getFrom() > iv.getTo()) enabled = false;
             if (iv.getFrom() < dayStart) enabled = false;
             if (dayEnd != -1 && iv.getTo() > dayEnd) enabled = false;
             if (dayEnd != -1 && iv.getFrom() > dayEnd) enabled = false;
@@ -174,6 +190,25 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
             saveButton.setEnabled(enabled);
             saveButton.getIcon().setAlpha(enabled ? 255 : 130);
         }
+    }
+
+    private void cannotSetTimeDialog(long firstPossibleHour, long end) {
+        String msg = getResources().getString(R.string.cannotSetTime) + " ";
+        msg += getResources().getString(R.string.chooseTimeBetween) + " ";
+        msg += CustomBindingAdapters.longToTimeStr(dayStart);
+        msg += " & ";
+        msg += CustomBindingAdapters.longToTimeStr(end);
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(this);
+        builder.setTitle(getResources().getString(R.string.interventionTimeInvalid))
+                .setMessage(msg)
+                .setNeutralButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int which) {
+                        // do nothing
+                    }
+                })
+                .setIcon(R.drawable.ic_warning_black_24dp)
+                .show();
     }
 
     private void fixTimesDialog() {
@@ -289,33 +324,71 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
         }
     }
 
+    private void handlePickedTime(int pickedHour, int pickedMinute, final boolean isStart) {
+        boolean isShiftOngoing = (dayEnd == -1);
+        long firstHourMinuteInShift = new HourMinute(pickedHour, pickedMinute).toMillisSmart(dayStart);
+        long now = Calendar.getInstance().getTimeInMillis();
+        if (isShiftOngoing && firstHourMinuteInShift > now) {
+            cannotSetTimeDialog(firstHourMinuteInShift, now);
+            return;
+        }
+        if ((!isShiftOngoing) && firstHourMinuteInShift > dayEnd) {
+            cannotSetTimeDialog(firstHourMinuteInShift, dayEnd);
+            return;
+        }
+        if (isStart) {
+            if (iv.getTo() != null && iv.getTo() < firstHourMinuteInShift) {
+                Toasts.showEndTimeBeforeStart();
+                return;
+            }
+            iv.setFrom(firstHourMinuteInShift);
+            if (iv.getTo() == null) {
+                iv.setTo(iv.getFrom() + TimeUnit.HOURS.toMillis(1)); //Auto fill end time with 1 hour
+                if ((!isShiftOngoing) && iv.getTo() > dayEnd) {
+                    iv.setTo(dayEnd);
+                }
+                if (isShiftOngoing && iv.getTo() > now) {
+                    iv.setTo(now);
+                }
+            }
+        } else {
+            if (iv.getFrom() != null && iv.getFrom() > firstHourMinuteInShift) {
+                Toasts.showEndTimeBeforeStart();
+                return;
+            }
+            iv.setTo(firstHourMinuteInShift);
+            if (iv.getFrom() == null) {
+                iv.setFrom(iv.getTo() - TimeUnit.HOURS.toMillis(1)); //Auto fill end time with -1 hour
+                if (iv.getFrom() < dayStart) {
+                    iv.setFrom(dayStart);
+                }
+            }
+        }
+        if (iv.getFrom() > now) {
+            fixTimesDialog();
+        } else if (iv.getFrom() < dayStart) {
+            fixTimesDialog();
+        } else if ((!isShiftOngoing) && iv.getTo() > dayEnd) {
+            fixTimesDialog();
+        } else if ((!isShiftOngoing) && iv.getFrom() > dayEnd) {
+            fixTimesDialog();
+        } else if (iv.getFrom() > iv.getTo()) {
+            if(Math.abs(iv.getFrom() - iv.getTo()) < TimeUnit.MINUTES.toMillis(1)) {
+                iv.setFrom(iv.getFrom());
+            } else {
+                fixTimesDialog();
+            }
+        }
+    }
+
     private void pickTime(int hour, int minute, final boolean isStart) {
         try {
             // Launch Time Picker Dialog
             TimePickerDialog timePickerDialog = new TimePickerDialog(this,
                     new TimePickerDialog.OnTimeSetListener() {
                         @Override
-                        public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                            if (isStart) {
-                                iv.setFrom(new HourMinute(hourOfDay, minute).toMillisSmart(dayStart));
-                                if (iv.getTo() == null) {
-                                    iv.setTo(iv.getFrom() + TimeUnit.HOURS.toMillis(1)); //Auto fill end time with 1 hour
-                                }
-                            } else {
-                                iv.setTo(new HourMinute(hourOfDay, minute).toMillisSmart(dayStart));
-                                if (iv.getFrom() == null) {
-                                    iv.setFrom(iv.getTo() - TimeUnit.HOURS.toMillis(1)); //Auto fill end time with -1 hour
-                                }
-                            }
-                            if (iv.getFrom() < dayStart) {
-                                fixTimesDialog();
-                            } else if (dayEnd != -1 && iv.getTo() > dayEnd) {
-                                fixTimesDialog();
-                            } else if (dayEnd != -1 && iv.getFrom() > dayEnd) {
-                                fixTimesDialog();
-                            } else if (iv.getFrom() >= iv.getTo()) {
-                                fixTimesDialog();
-                            }
+                        public void onTimeSet(TimePicker view, int pickedHour, int pickedMinute) {
+                            handlePickedTime(pickedHour, pickedMinute, isStart);
                             binding.setItem(iv);
                             conditionallyEnableSaveButton();
                         }

@@ -64,5 +64,7 @@
     <string name="interventionTimeInvalid">Interventie vindt niet plaats tijdens de dienst</string>
     <string name="fixTimes">Interventie tijd automatisch aanpassen naar de diensttijd?</string>
     <string name="welcomeFixQuit">Afsluiten</string>
+    <string name="cannotSetTime">De geselecteerde tijd valt buiten de dienst of is in de toekomst.</string>
+    <string name="chooseTimeBetween">Kies een tijd tussen</string>
 
 </resources>

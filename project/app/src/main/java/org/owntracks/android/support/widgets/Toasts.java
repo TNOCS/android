@@ -46,8 +46,11 @@ public class Toasts {
         if(stateChangeToast != null)
             stateChangeToast.cancel();
 
-        stateChangeToast = Toast.makeText(App.getContext(), state.getLabel(App.getContext()), Toast.LENGTH_SHORT);
-        stateChangeToast.show();
+        String label = state.getLabel(App.getContext());
+        if (label != null && label != "") {
+            stateChangeToast = Toast.makeText(App.getContext(), label, Toast.LENGTH_SHORT);
+            stateChangeToast.show();
+        }
     }
 
     public static void showWaypointRemovedToast() {
