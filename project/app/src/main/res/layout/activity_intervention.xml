@@ -3,8 +3,8 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
     <data>
         <import type="android.view.View"/>
-        <import type="org.owntracks.android.support.CustomBindingAdapters"/>
-        <variable name="item" type="org.owntracks.android.db.Intervention"/>
+        <import type="org.policetracks.android.support.CustomBindingAdapters"/>
+        <variable name="item" type="org.policetracks.android.db.Intervention"/>
     </data>
 
 

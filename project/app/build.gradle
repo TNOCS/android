@@ -17,7 +17,7 @@ android {
     buildToolsVersion '25.0.1'
 
     defaultConfig {
-        applicationId "org.owntracks.android"
+        applicationId "org.policetracks.android"
         minSdkVersion 16
         targetSdkVersion 25
         versionCode versionMajor * 10000 + versionMinor * 1000 + versionPatch * 100 + versionBuild
@@ -25,7 +25,7 @@ android {
 
         javaCompileOptions {
             annotationProcessorOptions {
-                arguments = [ eventBusIndex : 'org.owntracks.android.EventBusIndex' ]
+                arguments = [ eventBusIndex : 'org.policetracks.android.EventBusIndex' ]
             }
         }
 
@@ -56,7 +56,7 @@ android {
     sourceSets {
         main {
             jniLibs.srcDir 'jniLibs'
-            java.srcDirs = ['src/main/java', 'build/generated/source/greendao/org/owntracks/android/db']
+            java.srcDirs = ['src/main/java', 'build/generated/source/greendao/org/policetracks/android/db']
         }
     }
 
@@ -130,7 +130,7 @@ dependencies {
 
 //apt {
 //    arguments {
-//        eventBusIndex "org.owntracks.android.EventBusIndex"
+//        eventBusIndex "org.policetracks.android.EventBusIndex"
 //    }
 //}
 

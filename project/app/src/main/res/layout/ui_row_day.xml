@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto" >
     <data>
         <import type="android.view.View"/>
-        <variable name="day" type="org.owntracks.android.db.Day" />
+        <variable name="day" type="org.policetracks.android.db.Day" />
 
     </data>
 

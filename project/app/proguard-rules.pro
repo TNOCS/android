@@ -20,7 +20,7 @@
 -dontobfuscate
 
 
--keep public class org.owntracks.android.** {
+-keep public class org.policetracks.android.** {
   public protected private *;
 }
 
@@ -60,7 +60,7 @@ public static java.lang.String TABLENAME;
  -dontwarn com.fasterxml.jackson.databind.**
  -keep class org.codehaus.** { *; }
 
--keep public class org.owntracks.android.messages.** {
+-keep public class org.policetracks.android.messages.** {
  *;
  }
 

@@ -2,9 +2,9 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <data>
-        <import type="org.owntracks.android.App"/>
+        <import type="org.policetracks.android.App"/>
         <import type="android.view.View"/>
-        <variable name="vm" type="org.owntracks.android.ui.status.StatusViewModel" />
+        <variable name="vm" type="org.policetracks.android.ui.status.StatusViewModel" />
     </data>
 
 
@@ -84,7 +84,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{org.owntracks.android.support.widgets.BindingConversions.convertToString(vm.endpointQueue)}"
+                android:text="@{org.policetracks.android.support.widgets.BindingConversions.convertToString(vm.endpointQueue)}"
                 android:ellipsize="none"
                 style="@style/ListItemPrimary" />
 
@@ -103,7 +103,7 @@
                 android:paddingRight="@dimen/activity_horizontal_margin"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="@{org.owntracks.android.support.widgets.BindingConversions.convertToString(vm.permissionLocation)}"
+                android:text="@{org.policetracks.android.support.widgets.BindingConversions.convertToString(vm.permissionLocation)}"
                 android:ellipsize="none"
                 android:visibility="gone"
                 style="@style/ListItemPrimary" />

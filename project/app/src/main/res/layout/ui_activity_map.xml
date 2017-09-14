@@ -4,8 +4,8 @@
     xmlns:bind="http://schemas.android.com/apk/res-auto">
 
     <data>
-        <variable name="vm" type="org.owntracks.android.ui.map.MapViewModel" />
-        <import type="org.owntracks.android.App"/>
+        <variable name="vm" type="org.policetracks.android.ui.map.MapViewModel" />
+        <import type="org.policetracks.android.App"/>
         <import type="android.view.View" />
     </data>
 
