@@ -20,9 +20,9 @@
     <!-- To prevent the device from sleeping while handling MQTT traffic -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <!-- To autostart the app once the device boots -->
-    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <!--<uses-permission android:name="android.permission.BLUETOOTH" />-->
     <!-- For BLE beacon detection -->
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!--<uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />-->
     <!-- For BLE beacon detection -->
     <uses-permission
         android:name="android.permission.READ_EXTERNAL_STORAGE"

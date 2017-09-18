@@ -1,4 +1,8 @@
 package org.policetracks.android.services;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
@@ -19,6 +23,7 @@ import org.policetracks.android.messages.MessageWaypoint;
 import org.policetracks.android.messages.MessageWaypoints;
 import org.policetracks.android.support.Events;
 import org.policetracks.android.support.MessageWaypointCollection;
+import org.policetracks.android.support.Parser;
 import org.policetracks.android.support.Preferences;
 import org.policetracks.android.support.interfaces.ProxyableService;
 
@@ -564,8 +569,37 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
             message._custom_CRUD = "U"; // Update it
         }
         ServiceProxy.getServiceMessage().sendMessage(message);
+        createLocalInterventionBackup(iv);
         if (shouldRemindIntervention())
             handleInterventionReminder(null);
+    }
+
+    private void createLocalInterventionBackup(Intervention iv) {
+        MessageIntervention message = MessageIntervention.fromDaoObject(iv);
+        String wireMessage = "";
+        try {
+            wireMessage = Parser.toJson(message);
+        } catch (Exception e) {
+            Timber.w("Error parsing message");
+            e.printStackTrace();
+        }
+
+        File file = new File(context.getExternalFilesDir(null), message.getId() + ".json");
+        if (file == null) {
+            Timber.w("Cannot open file for creating backup: " + context.getExternalFilesDir(null));
+            return;
+        }
+        if (file.exists())
+            file.delete();
+
+        try {
+            FileOutputStream stream = new FileOutputStream(file);
+            stream.write(wireMessage.getBytes());
+            stream.close();
+        } catch (Exception e) {
+            Timber.w("Error parsing message");
+            e.printStackTrace();
+        }
     }
 
     private void handleWaypoint(Waypoint w, boolean update, boolean remove) {

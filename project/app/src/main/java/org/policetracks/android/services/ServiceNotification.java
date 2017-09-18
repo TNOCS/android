@@ -447,7 +447,7 @@ public class ServiceNotification implements ProxyableService {
 
         notificationBuilderInterventionReminder.setSmallIcon(R.drawable.ic_notification);
         notificationBuilderInterventionReminder.setGroup(NOTIFICATION_ID_INTERVENTION_REMINDER + "");
-        notificationBuilderInterventionReminder.setAutoCancel(false);
+        notificationBuilderInterventionReminder.setAutoCancel(true);
         notificationBuilderInterventionReminder.setShowWhen(false);
 
         if (android.os.Build.VERSION.SDK_INT >= 21) {
