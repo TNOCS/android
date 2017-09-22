@@ -165,6 +165,7 @@ public class DiaryViewModel extends BaseViewModel<DiaryMvvm.View> implements Dia
             this.endToday();
         }
         updateAdapter();
+        ServiceProxy.getServiceLocator().resetInterventionReminder();
         ServiceProxy.getServiceNotification().updateNotificationOngoing();
     }
 

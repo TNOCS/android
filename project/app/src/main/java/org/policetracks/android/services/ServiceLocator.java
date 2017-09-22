@@ -250,12 +250,19 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
             Timber.v("PRIORITY_NO_POWER");
             this.mLocationRequest.setPriority(LocationRequest.PRIORITY_NO_POWER);
         }
-        Timber.v("setupBackgroundLocationRequest interval: %s",Preferences.getLocatorIntervalMillis());
-        Timber.v("setupBackgroundLocationRequest displacement: %s",Preferences.getLocatorDisplacement());
 
         this.mLocationRequest.setInterval(Preferences.getLocatorIntervalMillis());
 		this.mLocationRequest.setFastestInterval(10000);
 		this.mLocationRequest.setSmallestDisplacement(Preferences.getLocatorDisplacement());
+
+        // Overrule priority when tracking is not active to prevent unneeded battery drain in background
+        if (!Preferences.getPub()) {
+            this.mLocationRequest.setPriority(LocationRequest.PRIORITY_LOW_POWER);
+            this.mLocationRequest.setInterval(TimeUnit.MINUTES.toMillis(5));
+        }
+
+        Timber.v("setupBackgroundLocationRequest interval: %s",Preferences.getLocatorIntervalMillis());
+        Timber.v("setupBackgroundLocationRequest displacement: %s",Preferences.getLocatorDisplacement());
 	}
 
 	private void setupForegroundLocationRequest() {
@@ -560,7 +567,7 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
         if(update && remove)
             throw new IllegalArgumentException("update and remove cannot be true at the same time");
 
-        lastInterventionEntered = System.currentTimeMillis();
+        this.resetInterventionReminder();
         MessageIntervention message = MessageIntervention.fromDaoObject(iv);
         message._custom_endpoint = true; // Send it to the json webservice
         if (remove) {
@@ -680,11 +687,15 @@ public class ServiceLocator implements ProxyableService, GoogleApiClient.Connect
         }
 	}
 
+	public void resetInterventionReminder() {
+        this.lastInterventionEntered = System.currentTimeMillis();
+    }
+
     private void handleInterventionReminder(@Nullable SecurityException e) {
         if(e != null)
             Timber.e(e.getMessage());
         ServiceProxy.getServiceNotification().notifyInterventionReminder();
-        this.lastInterventionEntered = System.currentTimeMillis();
+        this.resetInterventionReminder();
     }
 
     private void handleSecurityException(@Nullable SecurityException e) {
