@@ -333,47 +333,57 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
             cannotSetTimeDialog(firstHourMinuteInShift, dayEnd);
             return;
         }
-        if (isStart) {
+        if (isStart) { // User set the start time
             if (iv.getTo() != null && iv.getTo() < firstHourMinuteInShift) {
                 Toasts.showEndTimeBeforeStart();
                 return;
             }
             iv.setFrom(firstHourMinuteInShift);
-            if (iv.getTo() == null) {
-                iv.setTo(iv.getFrom() + TimeUnit.HOURS.toMillis(1)); //Auto fill end time with 1 hour
-                if ((!isShiftOngoing) && iv.getTo() > dayEnd) {
-                    iv.setTo(dayEnd);
-                }
-                if (isShiftOngoing && iv.getTo() > now) {
-                    iv.setTo(now);
-                }
-            }
-        } else {
+            // Automatically set end time 1 hour later
+//            if (iv.getTo() == null) {
+//                iv.setTo(iv.getFrom() + TimeUnit.HOURS.toMillis(1)); //Auto fill end time with 1 hour
+//                if ((!isShiftOngoing) && iv.getTo() > dayEnd) {
+//                    iv.setTo(dayEnd);
+//                }
+//                if (isShiftOngoing && iv.getTo() > now) {
+//                    iv.setTo(now);
+//                }
+//            }
+        } else { // User set the end time
             if (iv.getFrom() != null && iv.getFrom() > firstHourMinuteInShift) {
                 Toasts.showEndTimeBeforeStart();
                 return;
             }
             iv.setTo(firstHourMinuteInShift);
-            if (iv.getFrom() == null) {
-                iv.setFrom(iv.getTo() - TimeUnit.HOURS.toMillis(1)); //Auto fill end time with -1 hour
-                if (iv.getFrom() < dayStart) {
-                    iv.setFrom(dayStart);
-                }
+            // Automatically set start time 1 hour earlier
+//            if (iv.getFrom() == null) {
+//                iv.setFrom(iv.getTo() - TimeUnit.HOURS.toMillis(1)); //Auto fill end time with -1 hour
+//                if (iv.getFrom() < dayStart) {
+//                    iv.setFrom(dayStart);
+//                }
+//            }
+        }
+        if (iv.getFrom() != null) {
+            if (iv.getFrom() > now) {
+                fixTimesDialog();
+            } else if (iv.getFrom() < dayStart) {
+                fixTimesDialog();
+            } else if ((!isShiftOngoing) && iv.getFrom() > dayEnd) {
+                fixTimesDialog();
             }
         }
-        if (iv.getFrom() > now) {
-            fixTimesDialog();
-        } else if (iv.getFrom() < dayStart) {
-            fixTimesDialog();
-        } else if ((!isShiftOngoing) && iv.getTo() > dayEnd) {
-            fixTimesDialog();
-        } else if ((!isShiftOngoing) && iv.getFrom() > dayEnd) {
-            fixTimesDialog();
-        } else if (iv.getFrom() > iv.getTo()) {
-            if(Math.abs(iv.getFrom() - iv.getTo()) < TimeUnit.MINUTES.toMillis(1)) {
-                iv.setFrom(iv.getFrom());
-            } else {
+        if (iv.getTo() != null) {
+            if ((!isShiftOngoing) && iv.getTo() > dayEnd) {
                 fixTimesDialog();
+            }
+        }
+        if (iv.getTo() != null && iv.getFrom() != null) {
+            if (iv.getFrom() > iv.getTo()) {
+                if (Math.abs(iv.getFrom() - iv.getTo()) < TimeUnit.MINUTES.toMillis(1)) {
+                    iv.setFrom(iv.getFrom());
+                } else {
+                    fixTimesDialog();
+                }
             }
         }
     }
@@ -428,14 +438,18 @@ public class ActivityIntervention extends ActivityBase implements View.OnClickLi
 
     private void updateSubtypeSpinner() {
         switch(this.iv.getType()) {
-            case "Dadergerichte surveillance":
-            case "Gebiedsgerichte surveillance":
+            case "Dadergerichte (hotshots) surveillance":
                 this.interventionSubtypes = getResources().getStringArray(R.array.intervention_subtypes_visible);
+                break;
+            case "Gebiedsgerichte (hotspots) surveillance":
+                this.interventionSubtypes = getResources().getStringArray(R.array.intervention_subtypes_visible_reversed);
                 break;
             case "Buiten/binnenring controle":
             case "Buitenringcontrole":
-            case "Wijk-op-slot":
                 this.interventionSubtypes = getResources().getStringArray(R.array.intervention_subtypes_number);
+                break;
+            case "Wijk-op-slot":
+                this.interventionSubtypes = getResources().getStringArray(R.array.intervention_subtypes_number_reversed);
                 break;
             default:
                 this.interventionSubtypes = new String[]{};

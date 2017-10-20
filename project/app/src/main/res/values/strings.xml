@@ -118,18 +118,19 @@
     </string-array>
 
     <string-array name="intervention_types">
-        <item>PGA-P0 - Veelplegers (aanlopen door wijkagent)</item>
-        <item>Dadergerichte surveillance</item>
-        <item>Gebiedsgerichte surveillance</item>
+        <item>Spoed-melding</item>
+        <item>NU-melding</item>
+        <item>Later-melding</item>
+        <item>Dadergerichte (hotshots) surveillance</item>
+        <item>Gebiedsgerichte (hotspots) surveillance</item>
         <item>Buiten/binnenring controle</item>
         <item>Wijk-op-slot</item>
         <item>Preventief bezoek overvalgevoelige locaties</item>
         <item>Buitenringcontrole</item>
         <item>Fosfor</item>
         <item>Buurtonderzoek op locatie</item>
-        <item>Spoed-melding</item>
-        <item>NU-melding</item>
-        <item>Later-melding</item>
+        <item>PGA-P - Veelplegers (aanlopen door wijkagent)</item>
+        <item>Recontact wijkagent</item>
         <item>Anders, namelijk:</item>
     </string-array>
 
@@ -138,10 +139,21 @@
         <item>in burger</item>
     </string-array>
 
+    <string-array name="intervention_subtypes_visible_reversed">
+        <item>in burger</item>
+        <item>in uniform</item>
+    </string-array>
+
     <string-array name="intervention_subtypes_number">
         <item>zonder ANPR</item>
         <item>met ANPR</item>
         <item>met partners</item>
+    </string-array>
+
+    <string-array name="intervention_subtypes_number_reversed">
+        <item>met partners</item>
+        <item>met ANPR</item>
+        <item>zonder ANPR</item>
     </string-array>
 
     <string name="mode_mqtt_private_label">Private MQTT</string>
